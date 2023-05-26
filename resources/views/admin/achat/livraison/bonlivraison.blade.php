@@ -38,7 +38,7 @@
                             <thead>
                                 <tr>
                                     <th>id</th>
-                                    <th>N°</th> 
+                                    <th>N° Bon Livraison</th> 
                                     <th>Bon Commande</th>  
                                     <th>Fournisseur</th>  
                                     <th>Etat</th>

@@ -38,7 +38,7 @@
                             <thead>
                                 <tr>
                                     <th>id</th>
-                                    <th>N°</th> 
+                                    <th>N° Bon Commande</th> 
                                     <th>Fournisseur</th>  
                                     <th>Etat</th>
                                     <th>Total HT</th>
