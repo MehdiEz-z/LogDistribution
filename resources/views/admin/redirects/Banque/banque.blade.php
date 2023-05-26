@@ -409,8 +409,12 @@ Banque | Log Dist Du Nord
             $("#motiflabel").show();
             $("#sourcetransactionlabel").show();
             $("#typetransactionlabel").show();
-            
-            
+            $('input[type="text"]').each(function() {
+              $(this).val('');
+            });
+            $('input[type="number"]').each(function() {
+              $(this).val('');
+            });
             $.ajax({
                 url: 'https://iker.wiicode.tech/api/bank/' + id,
                 type: 'GET',
@@ -420,7 +424,7 @@ Banque | Log Dist Du Nord
                     $("#myLargeModalLabel").text('Affecter une operation A  '+ data.nomBank +' ');
                     $('input[name="sourcetransaction"]').prop("readonly", true);
                     $("#typetransaction").val($("#typetransaction option:first").val());
-
+                    $("#sourcetransaction").val('Compte Bancaire');
 
                 },
                 error: function(data) {
@@ -453,8 +457,7 @@ Banque | Log Dist Du Nord
             },
             error: function(response) {
                 // Handle the error response
-                console.log('TTT');
-                swal(response.message, "", "warning");
+                swal(response.responseJSON.message, "", "warning");
             }
         });
          
