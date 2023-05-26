@@ -259,6 +259,13 @@ $(document).ready(function() {
         });
     });
 
+    $('#genererBonLivraisonButton').on('click', function() {
+        let url = '{{ route("createLivraison") }}';
+        window.location.href = url;
+    });
+
+
+
     $('#telechargerAcButton').on('click', function() {
         let bonCommandeId = '{{ $dataBonCommande["id"] }}';
         let url = 'https://iker.wiicode.tech/api/printbc/' + bonCommandeId + '/ac/true';

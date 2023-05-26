@@ -162,11 +162,12 @@
                             <button class="btn btn-warning text-white fw-bold col-12 mb-2 imp"  id="imprimerAcButton">Imprimer</button>
                         </div>
                         <div id="accordionTelecharger">
-                            <button class="btn btn-light fw-bold col-12 mb-2" id="telechargerAcButton">Télécharger</button>
+                            <button class="btn btn-light text-secondary fw-bold col-12 mb-2" id="telechargerAcButton">Télécharger</button>
                         </div>
                         <div id="accordionPaiement">
-                            <button class="btn btn-warning text-white fw-bold col-12 mb-2" id="paiementButton">Ajouter Paiement</button>
+                            <button class="btn btn-light text-secondary fw-bold col-12 mb-2" id="paiementButton">Ajouter Paiement</button>
                         </div>
+                        <a href="{{ route('showLivraison', $dataFacturee["bonLivraison_id"] )}}" id="retourBonLivraison" class="btn btn-warning fw-bold text-white col-12">Bon Livraison</a>
 
                         {{-- Modal  --}}
                         <div class="modal fade" id="paiementModal" tabindex="-1" aria-labelledby="paiementModalLabel" aria-hidden="true">
@@ -323,7 +324,7 @@
 <script>
 
 $(document).ready(function() {
-    $('#accordionImprimer, #accordionTelecharger, #accordionPaiement').hide();
+    $('#accordionImprimer, #accordionTelecharger, #accordionPaiement, #retourBonLivraison').hide();
 
     let confirme = {{ $dataFacturee['Confirme'] }};
     let etatPaiement = '{{ $dataFacturee['EtatPaiement']}}'; 
@@ -333,7 +334,7 @@ $(document).ready(function() {
     let factureId = {{ $dataFacturee["id"] }};
     
     if (confirme == 1) {
-        $('#accordionImprimer, #accordionTelecharger').show();
+        $('#accordionImprimer, #accordionTelecharger, #retourBonLivraison').show();
         if(etatPaiement === "Paye"){
             $('#accordionPaiement').hide();
         }else {
@@ -477,15 +478,15 @@ $(document).ready(function() {
                                         $('#transactionModalDetail').modal('hide');
                                         afficherTransactions();
                                         afficherBadgePaiement(etatPaiement)
-                                        console.log(etatPaiement)
+                                        console.log(EtatPaiement)
                                         $('#reglerBoutonConfirmation').hide();
                                         $badgeTransaction.html('<span class=" badge bg-success text-white ms-3"><i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i>Reglé</span>');
                                     });
                                 },
-                                error: function(xhr, status, error) {
+                                error: function(response) {
                                     swal({
                                         title: 'Erreur',
-                                        text: 'Une erreur s\'est produite lors de la confirmation du reglement du chéque.',
+                                        text: response.responseJSON.message,
                                         icon: 'error',
                                         buttons: false,
                                         timer: 2000,

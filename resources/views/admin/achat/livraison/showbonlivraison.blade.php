@@ -134,10 +134,12 @@
                             <button class="btn btn-warning text-white fw-bold col-12 mb-2 imp"  id="imprimerAcButton">Imprimer</button>
                         </div>
                         <div id="accordionTelecharger">
-                            <button class="btn btn-light fw-bold col-12 mb-2" id="telechargerAcButton">Télécharger</button>
+                            <button class="btn btn-light text-secondary fw-bold col-12 mb-2" id="telechargerAcButton">Télécharger</button>
                         </div>
+                        <button id="genererBonReceptionButton" class="btn btn-light fw-bold text-secondary col-12 mb-2">Generer Bon Récéption</button>
+                        <button id="genererFacture" class="btn btn-light fw-bold text-secondary col-12 mb-2">Generer Facture</button>
+                        <a href="{{ route('showCommande', $dataBonLivraison["bonCommande_id"] )}}" id="retourBonCommande" class="btn btn-warning fw-bold text-white col-12">Bon Commande</a>
                         <button class="btn btn-light fw-bold text-secondary col-12 mb-2" id="confirmationButton">Confirmer</button>
-                        <button id="genererBonReceptionButton" class="btn btn-warning fw-bold text-white col-12">Generer Bon Récéption</button>
                     </div>
                 </div>
             </div>
@@ -156,24 +158,42 @@
 <script>
 
 $(document).ready(function() {
-    $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton').hide();
+    $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton, #retourBonCommande, #genererFacture').hide();
 
     let confirme = {{ $dataBonLivraison['Confirme'] }};
     let $statutBadge = $('.statut-dispo');
+    let existe = {{ $dataBonLivraison['id'] }};
     
     if (confirme == 1) {
-        $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton').show();
+        $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton , #retourBonCommande').show();
         $('#confirmationButton').hide();
         $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
         $statutBadge.removeClass('bg-danger').addClass('bg-success');
         console.log($statutBadge)
     } else {
-        $('#accordionImprimer, #accordionTelecharger').hide();
+        $('#accordionImprimer, #accordionTelecharger, #retourBonCommande').hide();
         $('#confirmationButton').show();
         $statutBadge.html('<i class="ri-close-circle-line align-middle font-size-14 text-white pe-1"></i> Non Confirmé');
         $statutBadge.removeClass('bg-success').addClass('bg-danger');
         console.log($statutBadge)
     }
+
+    $.ajax({
+        url: 'https://iker.wiicode.tech/api/getblf',
+        method: 'GET',
+        success: function(response) { 
+           response.forEach(e => {
+            
+            console.log(e.id)
+                if (e.id == existe) {
+                    $('#genererFacture').show();
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error(error);
+        }
+    }); 
 
     $('#confirmationButton').on('click', function() {
         let bonLivraisonId = '{{ $dataBonLivraison["id"] }}';
@@ -189,7 +209,7 @@ $(document).ready(function() {
                     buttons: false,
                     timer: 1500,
                 }).then(function() {
-                    $('#accordionImprimer, #accordionTelecharger').show();
+                    $('#accordionImprimer, #accordionTelecharger, #genererFacture, #retourBonCommande').show();
                     $('#confirmationButton').hide();
                     $statutBadge.removeClass('bg-danger').addClass('bg-success');
                     $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');
@@ -207,6 +227,11 @@ $(document).ready(function() {
                 console.error(error);
             }
         });
+    });
+
+    $('#genererFacture').on('click', function() {
+        let url = '{{ route("createFacture") }}';
+        window.location.href = url;
     });
 
     $('#telechargerAcButton').on('click', function() {

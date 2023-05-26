@@ -60,9 +60,6 @@
                                 <label class="form-label" for="bcarticle">Articles</label>
                                 <select class="form-select" name="bcarticle" id="bcarticle">
                                     <option>Selectionner un article</option>
-                                    @foreach($dataArticle as $article)
-                                        <option value="{{$article['id']}}">{{$article['article_libelle']}}</option>
-                                    @endforeach
                                 </select>
                             </div>
                             <table id="bctable" class="table table-striped table-bordered dt-responsive nowrap mb-4" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -184,7 +181,7 @@
         if (referenceInput.value == '' || fournisseurSelect.value == '' || dateSelect.value == '') {
             disableArticleSelect();
         } else {
-            enableArticleSelect(); 
+            enableArticleSelect();
         }
     }
 
@@ -417,6 +414,7 @@ $(document).ready(function() {
             dataType: 'json',
             success: function(response) {
                 $('#bcarticle').empty();
+                $('#bcarticle').append('<option value="">Selectionner un article</option>');
                 $.each(response.articles, function(index, article) {
                     $('#bcarticle').append('<option value="' + article.id + '">' + article.article_libelle + '</option>');
                 });
