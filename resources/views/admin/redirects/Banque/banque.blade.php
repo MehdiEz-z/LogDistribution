@@ -241,7 +241,7 @@ Banque | Log Dist Du Nord
                     '<a onclick="editbank(' + bank.id + ')" class="btn btn-outline-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
                     '<i class="fas fa-info-circle"></i></a>' +
                     '<div><button onclick="addsoldebank(' + bank.id + ')" class="btn btn-outline-success btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
-                    '<i class="fas fa-money-check-alt"></i></button> </div>' +
+                    '<span class="icon-with-flag"> <i class="fas fa-exchange-alt"></i><i class="fas fa-dollar-sign flag-icon"></i></span></button> </div>' +
                     '</td>');
 
                 tbody.append(row);
