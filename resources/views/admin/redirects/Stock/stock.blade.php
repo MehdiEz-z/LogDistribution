@@ -192,18 +192,17 @@ function displaydatastock() {
         type: 'GET',
         dataType: 'json',
         success: function(data) {
-            // console.log(data);
+            console.log(data);
             var tbody = $('.table tbody');
-            tbody.empty(); // Clear the existing table body
-            var stockdata = data.data;
+          
             // console.log(stockdata[0].id);
             // Loop over the data array
-            for (var i = 0; i < stockdata.length; i++) {
-                var stock = stockdata[i];
+            for (var i = 0; i < data.length; i++) {
+                var stock = data[i];
                 var row = $('<tr></tr>');
                 row.append('<td>' + stock.id + '</td>');
-                row.append('<td>' + stock.article + '</td>');
-                row.append('<td>' + stock.warehouse + '</td>');
+                row.append('<td>' + stock.article_libelle + '</td>');
+                row.append('<td>' + stock.nom_Warehouse + '</td>');
                 row.append('<td>' + stock.actual_stock + '</td>');
                 row.append('<td class="d-flex justify-content-center ">' +
                     '<div class="m-2"><button onclick="addstock(' + stock.id + ')" class="btn btn-outline-success btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +

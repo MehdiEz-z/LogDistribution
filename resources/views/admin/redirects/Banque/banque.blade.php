@@ -420,12 +420,10 @@ Banque | Log Dist Du Nord
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
-                  
                     $("#myLargeModalLabel").text('Affecter une operation A  '+ data.nomBank +' ');
                     $('input[name="sourcetransaction"]').prop("readonly", true);
                     $("#typetransaction").val($("#typetransaction option:first").val());
                     $("#sourcetransaction").val('Compte Bancaire');                   
-
                 },
                 error: function(data) {
                   
