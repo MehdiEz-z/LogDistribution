@@ -358,7 +358,7 @@ $(document).ready(function() {
             $badgeFacture.html('<span class="fw-bold">Statut :</span><span class=" badge bg-danger text-white ms-2"><i class="ri-close-circle-line align-middle font-size-14 text-white pe-1"></i> Impayé</span>');
         } else if (etatPaiement === "En Cours") {
             $badgeFacture.html('<span class="fw-bold">Statut :</span><span class=" badge bg-info text-white ms-2"><i class="ri-radio-button-line align-middle font-size-14 text-white pe-1"></i> EnCours</span>');         
-        } else {
+        } else if (etatPaiement === "Paye") {
             $badgeFacture.html('<span class="fw-bold">Statut :</span><span class=" badge bg-success text-white ms-2"><i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Payé</span>');
         }
     }
@@ -465,7 +465,8 @@ $(document).ready(function() {
                                 url: 'https://iker.wiicode.tech/api/transactions/confime/' + transactionId,
                                 method: 'PUT',
                                 success: function(response) {
-                                    const etatPaiement = response.etatPaiement;
+                                    const etatPaiement = response.EtatPaiement;
+                                    console.log(response)
                                     swal({
                                         title: 'Confirmation réussie',
                                         text: 'Le chéque a été régler',
@@ -476,6 +477,7 @@ $(document).ready(function() {
                                         $('#transactionModalDetail').modal('hide');
                                         afficherTransactions();
                                         afficherBadgePaiement(etatPaiement)
+                                        console.log(etatPaiement)
                                         $('#reglerBoutonConfirmation').hide();
                                         $badgeTransaction.html('<span class=" badge bg-success text-white ms-3"><i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i>Reglé</span>');
                                     });
