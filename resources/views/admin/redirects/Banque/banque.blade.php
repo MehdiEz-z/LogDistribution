@@ -239,9 +239,9 @@ Banque | Log Dist Du Nord
                 row.append('<td class="TdCommentaire">' + bank.Commentaire + '</td>');
                 row.append('<td>' +
                     '<a onclick="editbank(' + bank.id + ')" class="btn btn-outline-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
-                    '<i class="fas fa-info-circle"></i></a>' +
+                    '<i class="fas fa-info-circle  mx-2"></i></a>' +
                     '<div><button onclick="addsoldebank(' + bank.id + ')" class="btn btn-outline-success btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
-                    '<i class="fas fa-money-check-alt"></i></button> </div>' +
+                    '<span class="icon-with-flag"> <i class="fas fa-exchange-alt mx-1 "></i><i class="fas fa-dollar-sign flag-icon"></i></span></button> </div>' +
                     '</td>');
 
                 tbody.append(row);
@@ -398,7 +398,7 @@ Banque | Log Dist Du Nord
             $("#add-btn").hide()
             $("#update-btn").hide()
             $("#add-solde-btn").show()
-            $("#myLargeModalLabel").text('Ajouter un solde au ');
+            $("#myLargeModalLabel").text('Ajouter un solde au');
             $("#namebanklabel").hide();
             $("#telelabel").hide();
             $("#adresslabel").hide();
@@ -409,8 +409,12 @@ Banque | Log Dist Du Nord
             $("#motiflabel").show();
             $("#sourcetransactionlabel").show();
             $("#typetransactionlabel").show();
-            
-            
+            $('input[type="text"]').each(function() {
+              $(this).val('');
+            });
+            $('input[type="number"]').each(function() {
+              $(this).val('');
+            });
             $.ajax({
                 url: 'https://iker.wiicode.tech/api/bank/' + id,
                 type: 'GET',
@@ -420,7 +424,7 @@ Banque | Log Dist Du Nord
                     $("#myLargeModalLabel").text('Affecter une operation A  '+ data.nomBank +' ');
                     $('input[name="sourcetransaction"]').prop("readonly", true);
                     $("#typetransaction").val($("#typetransaction option:first").val());
-
+                    $("#sourcetransaction").val('Compte Bancaire');                   
 
                 },
                 error: function(data) {
@@ -453,8 +457,7 @@ Banque | Log Dist Du Nord
             },
             error: function(response) {
                 // Handle the error response
-                console.log('TTT');
-                swal(response.message, "", "warning");
+                swal(response.responseJSON.message, "", "warning");
             }
         });
          
