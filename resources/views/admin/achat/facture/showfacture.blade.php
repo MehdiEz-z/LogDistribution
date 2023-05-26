@@ -377,7 +377,7 @@ $(document).ready(function() {
                     buttons: false,
                     timer: 1500,
                 }).then(function() {
-                    $('#accordionImprimer, #accordionTelecharger, #accordionPaiement').show();
+                    $('#accordionImprimer, #accordionTelecharger, #accordionPaiement, #retourBonLivraison').show();
                     $('#confirmationButton').hide();
                     $statutBadge.removeClass('bg-danger').addClass('bg-success');
                     $statutBadge.html('<i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i> Confirmé');                   
@@ -478,7 +478,9 @@ $(document).ready(function() {
                                         $('#transactionModalDetail').modal('hide');
                                         afficherTransactions();
                                         afficherBadgePaiement(etatPaiement)
-                                        console.log(EtatPaiement)
+                                        if(etatPaiement === 'Paye'){
+                                            $('#accordionPaiement').hide();
+                                        }
                                         $('#reglerBoutonConfirmation').hide();
                                         $badgeTransaction.html('<span class=" badge bg-success text-white ms-3"><i class="ri-checkbox-circle-line align-middle font-size-14 text-white pe-1"></i>Reglé</span>');
                                     });
@@ -744,7 +746,8 @@ $(document).ready(function() {
             type: 'POST',
             data: transactionData,
             success: function(response) { 
-                const etatPaiement = response.EtatPaiement;             
+                const etatPaiement = response.EtatPaiement;  
+                console.log(etatPaiement)           
                 paiementModal.hide();
                 swal({
                     title: response.message,

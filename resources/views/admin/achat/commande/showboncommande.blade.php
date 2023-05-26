@@ -173,7 +173,10 @@
                             </div>
                         </div>
                         <button class="btn btn-light fw-bold text-secondary col-12 mb-2" id="confirmationButton">Confirmer</button>
-                        <button id="genererBonLivraisonButton" class="btn btn-warning fw-bold text-white col-12">Generer Bon Livraison</button>
+                        <button id="genererBonLivraisonButton" class="btn btn-light fw-bold text-secondary col-12">Generer Bon Livraison</button>
+                        @if( $dataBonCommande['bonLivraison_id'] != null )
+                            <a href="{{ route('showLivraison', $dataBonCommande["bonLivraison_id"] )}}" id="goLivraison" class="btn btn-warning fw-bold text-white col-12">Bon Livraison</a>
+                        @endif
                     </div>
                 </div>
             </div>
