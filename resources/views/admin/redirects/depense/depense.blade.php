@@ -613,7 +613,7 @@ Depenses | Log Dist Du Nord
               
              $.ajax({
                 url : "https://iker.wiicode.tech/api/depense/" + upDepenseId,
-           type : 'PUT',
+           type : 'put',
            data : {
             depense : upDepensename,
             depense_Tax : upDepenseTax,
