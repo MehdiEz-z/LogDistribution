@@ -31,38 +31,24 @@
             <div class="col-lg-8">
                 <div class="card">
                     <div class="card-body">
-                        @if($message = Session::get('successCat'))
-                                <div class="alert alert-success alert-dismissible fade show my-3" role="alert">
-                                    <i class="mdi mdi-check-all me-2"></i>
-                                    {{$message}}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            @endif
-
-                            @if($message = Session::get('errorCat'))
-                                <div class="alert alert-danger alert-dismissible fade show my-3" role="alert">
-                                    <i class="mdi mdi-block-helper me-2"></i>
-                                    {{$message}}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                </div>
-                            @endif
-    
-                        <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                            <thead>
-                                <tr>
-                                    <th>id</th>
-                                    <th>Categorie</th>
-                                    <th>Date de creation</th>
-                                    <th>Détail</th>
-                                </tr>
-                            </thead>
-                            
-                            <tbody class="text-center">
-                                        <tr>
-           
-                                        </tr>
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-centered mb-0 align-middle table-hover table-nowrap text-center">
+                                <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>Categorie</th>
+                                        <th>Date de creation</th>
+                                        <th>Détail</th>
+                                    </tr>
+                                </thead>
+                                
+                                <tbody class="text-center">
+                                            <tr>
+            
+                                            </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div> 

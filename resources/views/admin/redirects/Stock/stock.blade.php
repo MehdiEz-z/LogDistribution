@@ -128,38 +128,24 @@ Stock | Log Dist Du Nord
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        @if($message = Session::get('success'))
-                        <div class="alert alert-success alert-dismissible fade show my-3" role="alert">
-                            <i class="mdi mdi-check-all me-2"></i>
-                            {{$message}}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    @endif
+                        <div class="table-responsive">
+                            <table class="table table-centered mb-0 align-middle table-hover table-nowrap text-center">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>id</th>
+                                        <th>Articles</th>
+                                        <th>Warehouses</th>
+                                        <th>Actual Stock</th>
+                                        <th>Operations</th>
+                                    </tr>
+                                </thead>
 
-                    @if($message = Session::get('error'))
-                        <div class="alert alert-danger alert-dismissible fade show my-3" role="alert">
-                            <i class="mdi mdi-block-helper me-2"></i>
-                            {{$message}}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                <tbody class="text-center">
+                                    <tr>                                   
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                    @endif
-                        <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                            <thead>
-                                <tr class="text-center">
-                                    <th>id</th>
-                                    <th>Articles</th>
-                                    <th>Warehouses</th>
-                                    <th>Actual Stock</th>
-                                    <th>Operations</th>
-                                </tr>
-                            </thead>
-
-                            <tbody class="text-center">
-                                {{-- @foreach($data as $banque) --}}
-                                <tr>                                   
-                                </tr>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
