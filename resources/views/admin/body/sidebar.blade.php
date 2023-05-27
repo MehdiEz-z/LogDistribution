@@ -165,6 +165,12 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('adminCaisse') }}" class="waves-effect">
+                        <i class="fas fa-cash-register"></i>
+                        <span>Caisse</span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('adminwarehouse') }}" class="waves-effect">
                         <i class="ri-building-line"></i>
                         <span>Entrepôt</span>

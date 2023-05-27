@@ -398,7 +398,7 @@ Banque | Log Dist Du Nord
             $("#add-btn").hide()
             $("#update-btn").hide()
             $("#add-solde-btn").show()
-            $("#myLargeModalLabel").text('Ajouter un solde au');
+            $("#myLargeModalLabel").text('Ajouter un solde au ');
             $("#namebanklabel").hide();
             $("#telelabel").hide();
             $("#adresslabel").hide();
@@ -420,10 +420,12 @@ Banque | Log Dist Du Nord
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
+                  
                     $("#myLargeModalLabel").text('Affecter une operation A  '+ data.nomBank +' ');
                     $('input[name="sourcetransaction"]').prop("readonly", true);
                     $("#typetransaction").val($("#typetransaction option:first").val());
-                    $("#sourcetransaction").val('Compte Bancaire');                   
+                    $("#sourcetransaction").val('Compte Bancaire')
+
                 },
                 error: function(data) {
                   

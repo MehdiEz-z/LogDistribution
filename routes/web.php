@@ -15,7 +15,7 @@ use App\Http\Controllers\Admin\Achat\FournisseursController;
 use App\Http\Controllers\Admin\Article\CategoriesController;
 use App\Http\Controllers\admin\Personnel\EmployesController;
 use App\Http\Controllers\Admin\Personnel\MagaziniersController;
-
+use App\Http\Controllers\CaisseController;
 
 Route::controller(DashboardController::class)->group(function() {
     Route::get('/', 'Index')->name('adminDashboard');
@@ -93,6 +93,9 @@ Route::controller(App\Http\Controllers\Admin\Vente\PaiementController::class)->g
 
 Route::controller(BanqueController::class)->group(function() {
     Route::get('/banque', 'Index')->name('adminbanque');
+});
+Route::controller(CaisseController::class)->group(function() {
+    Route::get('/Caisse', 'Index')->name('adminCaisse');
 });
 
 Route::controller(StockController::class)->group(function() {
