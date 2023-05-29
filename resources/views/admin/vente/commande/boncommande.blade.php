@@ -28,7 +28,7 @@
         <div class="d-flex mb-3 justify-content-end">
             <a href="{{route('createCommandeVente')}}" class="btn btn-warning fw-bold text-white" id="createBtn">Créer un bon de commande</a>
         </div>
-{{-- 
+
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -39,7 +39,7 @@
                                 <tr>
                                     <th>id</th>
                                     <th>N° Bon Commande</th> 
-                                    <th>Fournisseur</th>  
+                                    <th>Client</th>  
                                     <th>Etat</th>
                                     <th>Total HT</th>
                                     <th>Total TVA</th>
@@ -54,8 +54,8 @@
                                 @foreach($dataBc as $boncommande)
                                         <tr>
                                             <td class="text-warning fw-bold">#{{$boncommande['id']}}</td>
-                                            <td>{{$boncommande['Numero_bonCommande']}}</td>
-                                            <td>{{$boncommande['fournisseur']}}</td>
+                                            <td>{{$boncommande['Numero_bonCommandeVente']}}</td>
+                                            <td>{{$boncommande['client']}}</td>
                                             <td>{{$boncommande['Etat']}}</td>
                                             <td>{{$boncommande['Total_HT']}}</td>
                                             <td>{{$boncommande['Total_TVA']}}</td>
@@ -67,7 +67,7 @@
                                                 </span>
                                             </td>
                                             <td>
-                                                {{\Carbon\Carbon::parse($boncommande['date_BCommande'])->isoFormat("LL") }}
+                                                {{\Carbon\Carbon::parse($boncommande['date_BCommandeVente'])->isoFormat("LL") }}
                                             </td>
                                             <td>
                                                 <a  href="{{route("showCommande",$boncommande['id'])}}"
@@ -85,7 +85,7 @@
                     </div>
                 </div>
             </div> 
-        </div> --}}
+        </div>
     </div>
     
 </div>

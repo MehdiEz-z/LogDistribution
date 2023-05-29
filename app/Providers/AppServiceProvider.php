@@ -20,5 +20,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         \App::setLocale('fr');
+        $yourVariableValue = 'https://iker.wiicode.tech/api';
+        app()->instance('backendUrl', $yourVariableValue);
     }
 }
