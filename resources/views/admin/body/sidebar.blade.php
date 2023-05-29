@@ -101,7 +101,7 @@
 
                         <li>
                             <a href="{{ route('achatFacture') }}" class="waves-effect">
-                                <i class="ri-article-fill"></i>
+                                <i class="ri-newspaper-line"></i>
                                 <span>Facture</span>
                             </a>
                         </li>
@@ -129,12 +129,26 @@
                             </a>
                         </li>
 
-                        {{-- <li>
-                            <a href="{{ route('venteLivraison') }}" class="waves-effect">
-                                <i class=" ri-newspaper-line "></i>
+                        <li>
+                            <a href="{{ route('listeCommandeVente') }}" class="waves-effect">
+                                <i class="ri-clipboard-line"></i>
+                                <span>Bons de commande</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('listeLivraisonVente') }}" class="waves-effect">
+                                <i class=" ri-survey-line "></i>
                                 <span>Bons de livraison</span>
                             </a>
-                        </li> --}}
+                        </li>
+
+                        <li>
+                            <a href="{{ route('venteFacture') }}" class="waves-effect">
+                                <i class="ri-newspaper-line"></i>
+                                <span>Facture</span>
+                            </a>
+                        </li>
 
                         <li>
                             <a href="{{ route('ventePaiement') }}" class="waves-effect">

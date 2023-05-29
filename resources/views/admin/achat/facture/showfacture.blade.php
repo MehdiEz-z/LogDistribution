@@ -463,7 +463,7 @@ $(document).ready(function() {
                         $('#transactionModalDetail').modal('show');
                         $('#reglerBoutonConfirmation').on('click', function() {      
                             $.ajax({
-                                url: 'https://iker.wiicode.tech/api/transactions/confime/' + transactionId,
+                                url: 'https://iker.wiicode.tech/api/transactions/confirme/' + transactionId,
                                 method: 'PUT',
                                 success: function(response) {
                                     const etatPaiement = response.EtatPaiement;

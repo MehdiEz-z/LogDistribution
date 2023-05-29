@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CaisseController;
 use App\Http\Controllers\admin\StockController;
 use App\Http\Controllers\Admin\BanqueController;
 use App\Http\Controllers\admin\DepenseController;
@@ -8,14 +9,13 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\admin\WareHouseController;
 use App\Http\Controllers\Admin\Vente\ClientController;
 use App\Http\Controllers\Admin\Article\ArticlesController;
-use App\Http\Controllers\Admin\Achat\BonCommandeController;
 use App\Http\Controllers\Admin\Achat\BonReceptionController;
 use App\Http\Controllers\admin\Achat\FactureAchatController;
 use App\Http\Controllers\Admin\Achat\FournisseursController;
 use App\Http\Controllers\Admin\Article\CategoriesController;
 use App\Http\Controllers\admin\Personnel\EmployesController;
+use App\Http\Controllers\admin\Vente\FactureVenteController;
 use App\Http\Controllers\Admin\Personnel\MagaziniersController;
-use App\Http\Controllers\CaisseController;
 
 Route::controller(DashboardController::class)->group(function() {
     Route::get('/', 'Index')->name('adminDashboard');
@@ -47,23 +47,28 @@ Route::controller(FournisseursController::class)->group(function() {
     Route::get('/fournisseurs', 'ListeFournisseur')->name('achatFournisseur');
 });
 
-Route::controller(BonCommandeController::class)->group(function() {
-    Route::get('/bon-commande', 'ListeBonCommande')->name('listeCommande');
-    Route::get('/bon-commande/nouveau', 'CreateBonCommande')->name('createCommande');
-    Route::get('/bon-commande/detail/{id}', 'ShowBonCommande')->name('showCommande');
-
+Route::controller(App\Http\Controllers\Admin\Achat\BonCommandeController::class)->group(function() {
+    Route::prefix('/bon-commande-achat')->group(function() {
+        Route::get('/', 'ListeBonCommande')->name('listeCommande');
+        Route::get('/nouveau', 'CreateBonCommande')->name('createCommande');
+        Route::get('/detail/{id}', 'ShowBonCommande')->name('showCommande');
+    });
 });
 
 Route::controller(App\Http\Controllers\Admin\Achat\BonLivraisonController::class)->group(function() {
-    Route::get('/bon-livraison', 'ListeBonLivraison')->name('listeLivraison');
-    Route::get('/bon-livraison/nouveau', 'CreateBonLivraison')->name('createLivraison');
-    Route::get('/bon-livraison/detail/{id}', 'ShowBonLivraison')->name('showLivraison');
+    Route::prefix('/bon-livraison-achat')->group(function() {
+        Route::get('/', 'ListeBonLivraison')->name('listeLivraison');
+        Route::get('/nouveau', 'CreateBonLivraison')->name('createLivraison');
+        Route::get('/detail/{id}', 'ShowBonLivraison')->name('showLivraison');
+    });
 });
 
 Route::controller(FactureAchatController::class)->group(function() {
-    Route::get('/facture-achat', 'ListeFactureAchat')->name('achatFacture');
-    Route::get('/facture-achat/nouveau', 'CreateFactureAchat')->name('createFacture');
-    Route::get('/facture-achat/detail/{id}', 'ShowFacture')->name('showFacture');
+    Route::prefix('/facture-achat')->group(function() {
+        Route::get('/', 'ListeFactureAchat')->name('achatFacture');
+        Route::get('/nouveau', 'CreateFactureAchat')->name('createFacture');
+        Route::get('/detail/{id}', 'ShowFacture')->name('showFacture');
+    });
 });
 
 Route::fallback(function () {
@@ -79,17 +84,43 @@ Route::controller(App\Http\Controllers\Admin\Achat\PaiementController::class)->g
 
 
 
+// ----------------------------------------------------------------------- //
+// ----------------------------     Vente     ---------------------------- //
+
 Route::controller(ClientController::class)->group(function() {
     Route::get('/clients', 'ListeClient')->name('venteClient');
 });
 
-// Route::controller(App\Http\Controllers\Admin\Vente\BonLivraisonController::class)->group(function() {
-//     Route::get('/bon-livraison', 'Index')->name('venteLivraison');
-// });
+Route::controller(App\Http\Controllers\Admin\Vente\BonCommandeController::class)->group(function() {
+    Route::prefix('/bon-commande-vente')->group(function() {
+        Route::get('/', 'ListeBonCommande')->name('listeCommandeVente');
+        Route::get('/nouveau', 'CreateBonCommande')->name('createCommandeVente');
+        Route::get('/detail/{id}', 'ShowBonCommande')->name('showCommandeVente');
+    });
+});
+
+Route::controller(App\Http\Controllers\Admin\Vente\BonLivraisonController::class)->group(function() {
+    Route::prefix('/bon-livraison-vente')->group(function() {
+        Route::get('/', 'ListeBonLivraison')->name('listeLivraisonVente');
+        Route::get('/nouveau', 'CreateBonLivraison')->name('createLivraisonVente');
+        Route::get('/detail/{id}', 'ShowBonLivraison')->name('showLivraisonVente');
+    });
+});
+
+Route::controller(FactureVenteController::class)->group(function() {
+    Route::prefix('/facture-vente')->group(function() {
+        Route::get('/', 'ListeFactureVente')->name('venteFacture');
+        Route::get('/nouveau', 'CreateFactureVente')->name('createFacture');
+        Route::get('/detail/{id}', 'ShowFacture')->name('showFacture');
+    });
+});
 
 Route::controller(App\Http\Controllers\Admin\Vente\PaiementController::class)->group(function() {
     Route::get('/paiement-vente', 'Index')->name('ventePaiement');
 });
+
+// ----------------------------     Fin Vente     ---------------------------- //
+// --------------------------------------------------------------------------- //
 
 Route::controller(BanqueController::class)->group(function() {
     Route::get('/banque', 'Index')->name('adminbanque');

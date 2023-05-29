@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class BonLivraisonController extends Controller
 {
-    public function Index(){
-        return view('admin.vente.bonlivraison');
+    public function ListeBonLivraison(){
+        return view('admin.vente.livraison.bonlivraison');
     }
 }
