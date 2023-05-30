@@ -16,7 +16,7 @@ class FactureVenteController extends Controller
     }
 
     public function CreateFactureVente(){
-        $bonLivraisons = Http::get(app('backendUrl').'/getblfv');
+        $bonLivraisons = Http::get(app('backendUrl').'/getblv');
         $dataBl = $bonLivraisons->json();
 
         return view('admin.vente.facture.createfacture',compact('dataBl'));
@@ -24,7 +24,7 @@ class FactureVenteController extends Controller
 
     public function ShowFacture($id){
         $facture = Http::get(app('backendUrl').'/facturevente/'.$id);
-        $dataFacturee = $facture->json()['data'];
+        $dataFacturee = $facture->json();
         
         $societe = Http::get(app('backendUrl').'/societe');
         $dataSociete = $societe->json();

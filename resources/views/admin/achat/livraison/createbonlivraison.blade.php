@@ -376,7 +376,7 @@ function sendLivraison() {
                 },
                 closeOnClickOutside: false
             }).then(function() {
-                window.location.href = "{{ env('APP_URL') }}/bon-livraison/detail/" + response.id;
+                window.location.href = "{{ env('APP_URL') }}/bon-livraison-achat/detail/" + response.id;
             });
         },
         error: function(response) {

@@ -139,7 +139,7 @@
                         <button id="genererBonReceptionButton" class="btn btn-light fw-bold text-secondary col-12 mb-2">Generer Bon Récéption</button>
                         <button id="genererFacture" class="btn btn-light fw-bold text-secondary col-12 mb-2">Generer Facture</button>
                         @if( $dataBonLivraison['factureVente_id'] != null )
-                            <a href="{{ route('showFacture', $dataBonLivraison["factureVente_id"] )}}" id="goFacture" class="btn btn-light fw-bold text-secondary mb-2 col-12">Facture</a>
+                            <a href="{{ route('showFactureVente', $dataBonLivraison["factureVente_id"] )}}" id="goFacture" class="btn btn-light fw-bold text-secondary mb-2 col-12">Facture</a>
                         @endif
                         <a href="{{ route('showCommandeVente', $dataBonLivraison["bonCommandeVente_id"] )}}" id="retourBonCommande" class="btn btn-warning fw-bold text-white col-12">Bon Commande</a>
                         <button class="btn btn-light fw-bold text-secondary col-12 mb-2" id="confirmationButton">Confirmer</button>
