@@ -14,4 +14,24 @@ class BonCommandeController extends Controller
         $dataBc = $bonCommandes->json()['data'];
         return view('admin.vente.commande.boncommande',compact('dataBc'));
     }
+
+    public function CreateBonCommande(){
+        $clients = Http::get(app('backendUrl').'/client');
+        $dataClient = $clients->json();
+        
+        $articles = Http::get(app('backendUrl').'/articles');
+        $dataArticle = $articles->json()['data'];
+
+        return view('admin.vente.commande.createboncommande',compact('dataClient','dataArticle'));
+    }
+
+    public function ShowBonCommande($id){
+        $boncommande = Http::get(app('backendUrl').'/boncommandevente/'.$id);
+        $dataBonCommande = $boncommande->json();
+
+        $societe = Http::get(app('backendUrl').'/societe');
+        $dataSociete = $societe->json();
+
+        return view('admin.vente.commande.showboncommande',compact('dataBonCommande','dataSociete'));
+    }
 }

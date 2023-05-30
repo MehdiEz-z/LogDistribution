@@ -110,8 +110,8 @@ Route::controller(App\Http\Controllers\Admin\Vente\BonLivraisonController::class
 Route::controller(FactureVenteController::class)->group(function() {
     Route::prefix('/facture-vente')->group(function() {
         Route::get('/', 'ListeFactureVente')->name('venteFacture');
-        Route::get('/nouveau', 'CreateFactureVente')->name('createFacture');
-        Route::get('/detail/{id}', 'ShowFacture')->name('showFacture');
+        Route::get('/nouveau', 'CreateFactureVente')->name('createFactureVente');
+        Route::get('/detail/{id}', 'ShowFacture')->name('showFactureVente');
     });
 });
 

@@ -70,7 +70,7 @@
                                                 {{\Carbon\Carbon::parse($boncommande['date_BCommandeVente'])->isoFormat("LL") }}
                                             </td>
                                             <td>
-                                                <a  href="{{route("showCommande",$boncommande['id'])}}"
+                                                <a  href="{{route("showCommandeVente",$boncommande['id'])}}"
                                                     class="btn btn-outline-primary btn-sm mb-2"
                                                     data-bs-toggle="tooltip"
                                                     data-bs-placement="top"

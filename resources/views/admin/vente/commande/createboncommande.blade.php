@@ -30,7 +30,7 @@
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         Créer un bon de commande
-                        <a href="{{ route('listeCommande') }}" class="btn btn-outline-secondary btn-sm" type="submit">
+                        <a href="{{ route('listeCommandeVente') }}" class="btn btn-outline-secondary btn-sm" type="submit">
                             <i class="ri-arrow-go-back-line"></i>
                         </a>
                     </div>
@@ -40,26 +40,29 @@
                             <div class="row">
                                 <div class="mb-3 col-lg-4">
                                     <label class="form-label" for="bcnumero">Numéro du bon de commande</label>
-                                    <input type="text" class="form-control" name="bcnumero" id="bcnumero" value="{{ old('bcnumero')}}" disabled/>
+                                    <input type="text" class="form-control" name="bcnumero" id="bcnumero" value="{{ old('bcnumero')}}" />
                                 </div>
                                 <div class="mb-3 col-lg-4">
-                                    <label class="form-label" for="bcfournisseur">Fournisseurs</label>
-                                    <select class="form-select" name="bcfournisseur" id="bcfournisseur">
-                                        <option value="">Selectionner un fournisseur</option>
-                                        @foreach($dataFournisseur as $fournisseur)
-                                            <option value="{{$fournisseur['id']}}">{{$fournisseur['fournisseur']}}</option>
+                                    <label class="form-label" for="bcclient">Clients</label>
+                                    <select class="form-select" name="bcclient" id="bcclient">
+                                        <option value="">Selectionner un client</option>
+                                        @foreach($dataClient as $client)
+                                            <option value="{{$client['id']}}">{{$client['nom_Client']}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="mb-3 col-lg-4">
                                     <label class="form-label" for="bcdate">Date</label>
-                                    <input type="text" class="form-control" name="bcdate" id="bcdate" value="{{ old('bcdate')}}" disabled/>
+                                    <input type="date" class="form-control" name="bcdate" id="bcdate" value="{{ old('bcdate')}}"/>
                                 </div>
                             </div>
                             <div class="mb-4">
                                 <label class="form-label" for="bcarticle">Articles</label>
                                 <select class="form-select" name="bcarticle" id="bcarticle">
-                                    <option>Selectionner un article</option>
+                                    <option value="">Selectionner un article</option>
+                                    @foreach($dataArticle as $article)
+                                        <option value="{{$article['id']}}">{{$article['article_libelle']}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <table id="bctable" class="table table-striped table-bordered dt-responsive nowrap mb-4" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -166,29 +169,9 @@
 
     const articleSelect = document.getElementById('bcarticle');
     const referenceInput = document.getElementById('bcnumero');
-    const fournisseurSelect = document.getElementById('bcfournisseur');
+    const ClientSelect = document.getElementById('bcclient');
     const dateSelect = document.getElementById('bcdate');
-
-    function disableArticleSelect() {
-        articleSelect.disabled = true;
-    }
-
-    function enableArticleSelect() {
-        articleSelect.disabled = false;
-    }
-
-    function checkConditions() {
-        if (referenceInput.value == '' || fournisseurSelect.value == '' || dateSelect.value == '') {
-            disableArticleSelect();
-        } else {
-            enableArticleSelect();
-        }
-    }
-
-    fournisseurSelect.addEventListener('change', checkConditions);
-
-    checkConditions();
-
+    const backendUrl = "{{ app('backendUrl') }}";
 
     let selectedArticleIds = [];
     let table = document.querySelector("#bctable");
@@ -206,7 +189,7 @@
             return;
         }
 
-        fetch('https://iker.wiicode.tech/api/articles/' + articleId)
+        fetch(backendUrl +'/articles/' + articleId)
         .then(response => response.json())
         .then(data => {
 
@@ -329,7 +312,7 @@ function sendCommande() {
     const totalTvaGlobal = totalTvaGlobalCell.textContent.replace("dhs", "").trim();
     const totalRemiseGlobal = totalRemiseCell.textContent.replace("dhs", "").trim();
     const totalTtcGlobal = totalTtcGlobalCell.textContent.replace("dhs", "").trim();
-    const fournisseurId = fournisseurSelect.value;
+    const clientId = ClientSelect.value;
     const dateBonCommande = dateSelect.value;
     const noteBonCommande = document.getElementById('bcnote').value;
     const tvaBonCommande = document.getElementById('bctva').value;
@@ -358,14 +341,14 @@ function sendCommande() {
     else confirmation = 0;
 
     let commande = {
-        Numero_bonCommande: numeroBonCommande,
+        Numero_bonCommandeVente: numeroBonCommande,
         Total_HT: totalHtGlobal,
         Total_TVA: totalTvaGlobal,
         Confirme: confirmation,
         remise: totalRemiseGlobal,
-        date_BCommande: dateBonCommande,
+        date_BCommandeVente: dateBonCommande,
         Total_TTC: totalTtcGlobal,
-        fournisseur_id: fournisseurId,
+        client_id: clientId,
         Commentaire: noteBonCommande,
         TVA : tvaBonCommande,
         Articles: articles
@@ -374,12 +357,12 @@ function sendCommande() {
     console.log(commande);
 
     $.ajax({
-        url: 'https://iker.wiicode.tech/api/boncommande',
+        url: backendUrl +'/boncommandevente',
         type: 'POST',
         data: commande,
         success: function(response) {
             swal({
-                title: response.id,
+                title: response.message,
                 icon: "success",
                 button: {
                     text: "OK",
@@ -387,7 +370,7 @@ function sendCommande() {
                 },
                 closeOnClickOutside: false
             }).then(function() {
-                window.location.href = "{{ env('APP_URL') }}/bon-commande-achat/detail/" + response.id;
+                window.location.href = "{{ env('APP_URL') }}/bon-commande-vente/detail/" + response.id;
             });
         },
         error: function(response) {
@@ -402,46 +385,6 @@ function sendCommande() {
     });
 
 }
-
-$(document).ready(function() {
-
-    $('#bcfournisseur').on('change', function() {
-        const fournisseurId = $(this).val();
-        
-        $.ajax({
-            url: 'https://iker.wiicode.tech/api/articlefr/' + fournisseurId,
-            type: 'GET',
-            dataType: 'json',
-            success: function(response) {
-                $('#bcarticle').empty();
-                $('#bcarticle').append('<option value="">Selectionner un article</option>');
-                $.each(response.articles, function(index, article) {
-                    $('#bcarticle').append('<option value="' + article.id + '">' + article.article_libelle + '</option>');
-                });
-            },
-            error: function(response) {
-                console.log(response);
-            }
-        });
-    });
-
-    $.ajax({
-        url: 'https://iker.wiicode.tech/api/getnbc',
-        type: 'GET',
-        success: function(response) {
-            console.log(response);
-            document.getElementById("bcnumero").value = response.Numero_bonCommande;
-            let today = new Date();
-            let dd = String(today.getDate()).padStart(2, '0');
-            let mm = String(today.getMonth() + 1).padStart(2, '0');
-            let yyyy = today.getFullYear();
-
-            today = yyyy + '-' + mm + '-' + dd;
-            document.getElementById("bcdate").value = today;
-        },
-    });
-
-});
 
 </script>
     
