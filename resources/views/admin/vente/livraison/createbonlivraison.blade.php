@@ -103,19 +103,19 @@
                                         <tbody>
                                             <tr>
                                                 <th width="50" class="fw-normal">Total HT Global</th>
-                                                <td width="50" class="text-end" data-summary-field="totalht">0,00 dhs</td>
+                                                <td width="50" class="text-end" data-summary-field="totalht">0.00 dhs</td>
                                             </tr>
                                             <tr>
                                                 <th width="50" class="fw-normal">Remise</th>
-                                                <td width="50" class="text-end" data-summary-field="remise" class="fw-normal">0,00 dhs</td>
+                                                <td width="50" class="text-end" data-summary-field="remise" class="fw-normal">0.00 dhs</td>
                                             </tr>
                                             <tr>
                                                 <th width="50" class="fw-normal">Total TVA Global</th>
-                                                <td width="50" class="text-end" data-summary-field="totaltva">0,00 dhs</td>
+                                                <td width="50" class="text-end" data-summary-field="totaltva">0.00 dhs</td>
                                             </tr>
                                             <tr>
                                                 <th width="50" class="fw-bold">Total TTC Global</th>
-                                                <td width="50" class="text-end" data-summary-field="totalttc" class="fw-bold">0,00 dhs</td>
+                                                <td width="50" class="text-end" data-summary-field="totalttc" class="fw-bold">0.00 dhs</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -197,7 +197,7 @@ const bonCommandeId = this.value;
             quantiteCell.appendChild(quantiteInput);
 
             let totalHTCell = row.insertCell();
-            totalHTCell.textContent = '0,00 dhs';
+            totalHTCell.textContent = '0.00 dhs';
 
             let deleteCell = row.insertCell();
             let deleteButton = document.createElement('button');
@@ -224,7 +224,7 @@ const bonCommandeId = this.value;
                 if (prixUnitaireInput.value > 0 && quantiteInput.value > 0)
                     totalHTCell.textContent = totalHt.toFixed(2) + ' dhs';
                 if (prixUnitaireInput.value == 0 || quantiteInput.value == 0)
-                    totalHTCell.textContent = '0,00 dhs';
+                    totalHTCell.textContent = '0.00 dhs';
                 updateGlobalTotals();
             }
 
@@ -376,18 +376,37 @@ function sendLivraison() {
                 },
                 closeOnClickOutside: false
             }).then(function() {
-                window.location.href = "{{ env('APP_URL') }}/bon-livraison/detail/" + response.id;
+                window.location.href = "{{ env('APP_URL') }}/bon-livraison-vente/detail/" + response.id;
             });
         },
         error: function(response) {
+
+            let errorMessage 
+            if (response.responseJSON.message.hasOwnProperty('warehouse_id')) {
+                errorMessage = response.responseJSON.message.warehouse_id;
+            } else {
+                errorMessage = response.responseJSON.message;
+            }
+
+            let desiredQuantity = response.responseJSON.Quantity;
+            let availableQuantity = response.responseJSON.actual_stock;
+            
+            let errorText = errorMessage + "\n\n";
+        
+            if (desiredQuantity) {
+                errorText += "La Quantité Voulue: " + desiredQuantity + "\n" +
+                            "La Quantité disponible: " + availableQuantity;
+            }
+
             swal({
-                title: response.responseJSON.message,
-                icon: "warning",
+                title: "Erreur",
+                text: errorText,
+                icon: "error",
 
                 button: "OK",
-                dangerMode: true,
                 closeOnClickOutside: false
             });
+            console.log(response)
         }        
     });
 }

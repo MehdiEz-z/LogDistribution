@@ -21,4 +21,14 @@ class BonLivraisonController extends Controller
 
         return view('admin.vente.livraison.createbonlivraison',compact('dataBc'));
     }
+
+    public function ShowBonLivraison($id){
+        $bonlivraison = Http::get(app('backendUrl').'/bonlivraisonvente/'.$id);
+        $dataBonLivraison = $bonlivraison->json();
+
+        $societe = Http::get(app('backendUrl').'/societe');
+        $dataSociete = $societe->json();
+
+        return view('admin.vente.Livraison.showbonlivraison',compact('dataBonLivraison','dataSociete'));
+    }
 }
