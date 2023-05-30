@@ -122,7 +122,7 @@
                                 </div>
                             </div>
                         </div>
-                        <input type="hidden" class="form-control" name="fournisseurId" id="fournisseurId"/>
+                        <input type="hidden" class="form-control" name="clientId" id="clientId"/>
                         <div class="card-footer text-center">
                             <button onclick="sendLivraison()" class="btn btn-warning fw-bold text-white">Ajouter le bon de livraison</button>
                         </div>
@@ -150,6 +150,7 @@ const dateInput = document.getElementById('bldate');
 const noteTextarea = document.getElementById('blnote');
 const tableBody = document.getElementById('bltable').getElementsByTagName('tbody')[0];
 const warehouseSelect = document.getElementById('warehouseSelect');
+const backendUrl = "{{ app('backendUrl') }}";
 
 warehouseSelect.disabled = true;
 
@@ -162,9 +163,9 @@ const bonCommandeId = this.value;
         console.log(data.Articles);
         tableBody.innerHTML = '';
 
-        const fournisseurId = data.fournisseur_id;
-        let fournisseurIdInput = document.getElementById('fournisseurId');
-        fournisseurIdInput.value = fournisseurId;
+        const clientId = data.client_id;
+        let clientIdInput = document.getElementById('clientId');
+        clientIdInput.value = clientId;
 
         data.Articles.forEach(article => {
             let row = tableBody.insertRow();
@@ -316,7 +317,7 @@ function sendLivraison() {
     const dateBonLivraison = dateInput.value;
     const noteBonLivraison = noteTextarea.value;
     const tvaBonLivraison = document.getElementById('bltva').value;
-    const fournisseurId = document.getElementById('fournisseurId').value;
+    const clientId = document.getElementById('clientId').value;
     const warehouseId = document.getElementById('warehouseSelect').value;
 
     let articles = [];
@@ -344,17 +345,17 @@ function sendLivraison() {
     else confirmation = 0;
 
     let livraison = {
-        Numero_bonLivraison: numeroBonLivraison,
+        Numero_bonLivraisonVente: numeroBonLivraison,
         Total_HT: totalHtGlobal,
         Total_TVA: totalTvaGlobal,
         Confirme: confirmation,
         remise: totalRemiseGlobal,
-        date_Blivraison: dateBonLivraison,
+        date_BlivraisonVente: dateBonLivraison,
         Total_TTC: totalTtcGlobal,
-        fournisseur_id: fournisseurId,
+        client_id: clientId,
         Commentaire: noteBonLivraison,
         TVA : tvaBonLivraison,
-        bonCommande_id: bonCommandeId,
+        bonCommandeVente_id: bonCommandeId,
         warehouse_id : warehouseId,
         Articles: articles,
     };
@@ -362,7 +363,7 @@ function sendLivraison() {
     console.log(livraison);
 
     $.ajax({
-        url: backendUrl +'/bonlivraison',
+        url: backendUrl +'/bonlivraisonvente',
         type: 'POST',
         data: livraison,
         success: function(response) {

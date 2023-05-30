@@ -72,7 +72,7 @@
                                             {{\Carbon\Carbon::parse($bonlivraison['date_BlivraisonVente'])->isoFormat("LL") }}
                                         </td>
                                         <td>
-                                            <a  href="{{route("showLivraison",$bonlivraison['id'])}}"
+                                            <a  href="{{route("showLivraisonVente",$bonlivraison['id'])}}"
                                                 class="btn btn-outline-primary btn-sm mb-2"
                                                 data-bs-toggle="tooltip"
                                                 data-bs-placement="top"
