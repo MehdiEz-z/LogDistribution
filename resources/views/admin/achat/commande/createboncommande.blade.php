@@ -168,6 +168,7 @@
     const referenceInput = document.getElementById('bcnumero');
     const fournisseurSelect = document.getElementById('bcfournisseur');
     const dateSelect = document.getElementById('bcdate');
+    const backendUrl = "{{ app('backendUrl') }}";
 
     function disableArticleSelect() {
         articleSelect.disabled = true;
@@ -206,7 +207,7 @@
             return;
         }
 
-        fetch('https://iker.wiicode.tech/api/articles/' + articleId)
+        fetch(backendUrl +'/articles/' + articleId)
         .then(response => response.json())
         .then(data => {
 
@@ -374,7 +375,7 @@ function sendCommande() {
     console.log(commande);
 
     $.ajax({
-        url: 'https://iker.wiicode.tech/api/boncommande',
+        url: backendUrl +'/boncommande',
         type: 'POST',
         data: commande,
         success: function(response) {
@@ -409,7 +410,7 @@ $(document).ready(function() {
         const fournisseurId = $(this).val();
         
         $.ajax({
-            url: 'https://iker.wiicode.tech/api/articlefr/' + fournisseurId,
+            url: backendUrl +'/articlefr/' + fournisseurId,
             type: 'GET',
             dataType: 'json',
             success: function(response) {
@@ -426,7 +427,7 @@ $(document).ready(function() {
     });
 
     $.ajax({
-        url: 'https://iker.wiicode.tech/api/getnbc',
+        url: backendUrl +'/getnbc',
         type: 'GET',
         success: function(response) {
             console.log(response);

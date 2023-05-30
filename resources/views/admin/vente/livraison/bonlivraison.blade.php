@@ -29,7 +29,7 @@
             <a href="{{route('createLivraisonVente')}}" class="btn btn-warning fw-bold text-white" id="createBtn">Créer un bon de livraison</a>
         </div>
 
-        {{-- <div class="row">
+        <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
@@ -55,9 +55,9 @@
                                 @foreach($dataBl as $bonlivraison)
                                     <tr>
                                         <td class="text-warning fw-bold">#{{$bonlivraison['id']}}</td>
-                                        <td>{{$bonlivraison['Numero_bonLivraison']}}</td>
+                                        <td>{{$bonlivraison['Numero_bonLivraisonVente']}}</td>
                                         <td>{{$bonlivraison['Numero_bonCommande']}}</td>
-                                        <td>{{$bonlivraison['fournisseur']}}</td>
+                                        <td>{{$bonlivraison['client']}}</td>
                                         <td>{{$bonlivraison['Etat']}}</td>
                                         <td>{{$bonlivraison['Total_HT']}}</td>
                                         <td>{{$bonlivraison['Total_TVA']}}</td>
@@ -69,7 +69,7 @@
                                             </span>
                                         </td>
                                         <td>
-                                            {{\Carbon\Carbon::parse($bonlivraison['date_Blivraison'])->isoFormat("LL") }}
+                                            {{\Carbon\Carbon::parse($bonlivraison['date_BlivraisonVente'])->isoFormat("LL") }}
                                         </td>
                                         <td>
                                             <a  href="{{route("showLivraison",$bonlivraison['id'])}}"
@@ -87,7 +87,7 @@
                     </div>
                 </div>
             </div> 
-        </div> --}}
+        </div>
     </div>
     
 </div>

@@ -54,7 +54,7 @@
                                 </div>
                                 <div class="">
                                     @php
-                                        $fournisseurs = Http::get('https://iker.wiicode.tech/api/fournisseurs/'.$dataBonCommande['fournisseur_id']);
+                                        $fournisseurs = Http::get(app('backendUrl').'/fournisseurs/'.$dataBonCommande['fournisseur_id']);
                                         $dataFournisseur = $fournisseurs->json()['Fournisseur Requested'];
                                     @endphp
                                     <h6 class="mb-3">Envoyé à:</h6>
@@ -200,6 +200,7 @@ $(document).ready(function() {
     let confirme = {{ $dataBonCommande['Confirme'] }};
     let $statutBadge = $('.statut-dispo');
     let existe = {{ $dataBonCommande['id'] }};
+    const backendUrl = "{{ app('backendUrl') }}";
     
     if (confirme == 1) {
         $('#accordionImprimer, #accordionTelecharger').show();
@@ -214,7 +215,7 @@ $(document).ready(function() {
     }
 
     $.ajax({
-        url: 'https://iker.wiicode.tech/api/getbc',
+        url: backendUrl +'/getbc',
         method: 'GET',
         success: function(response) {
            response.forEach(e => {
@@ -232,7 +233,7 @@ $(document).ready(function() {
         let bonCommandeId = '{{ $dataBonCommande["id"] }}';
         
         $.ajax({
-            url: 'https://iker.wiicode.tech/api/boncommande/confirme/' + bonCommandeId,
+            url: backendUrl +'/boncommande/confirme/' + bonCommandeId,
             method: 'PUT',
             success: function(response) {
                 swal({
@@ -271,28 +272,28 @@ $(document).ready(function() {
 
     $('#telechargerAcButton').on('click', function() {
         let bonCommandeId = '{{ $dataBonCommande["id"] }}';
-        let url = 'https://iker.wiicode.tech/api/printbc/' + bonCommandeId + '/ac/true';
+        let url = backendUrl +'/printbc/' + bonCommandeId + '/ac/true';
         
         window.location.href = url;
     });
     
     $('#telechargerScButton').on('click', function() {
         let bonCommandeId = '{{ $dataBonCommande["id"] }}';
-        let url = 'https://iker.wiicode.tech/api/printbc/' + bonCommandeId + '/sc/true';
+        let url = backendUrl +'/printbc/' + bonCommandeId + '/sc/true';
         
         window.location.href = url;
     });
 
     $('#imprimerAcButton').on('click', function() {
         let bonCommandeId = '{{ $dataBonCommande["id"] }}';
-        let url = 'https://iker.wiicode.tech/api/printbc/' + bonCommandeId + '/ac/false';
+        let url = backendUrl +'/printbc/' + bonCommandeId + '/ac/false';
         
         window.open(url, '_blank');
     });
     
     $('#imprimerScButton').on('click', function() {
         let bonCommandeId = '{{ $dataBonCommande["id"] }}';
-        let url = 'https://iker.wiicode.tech/api/printbc/' + bonCommandeId + '/sc/false';
+        let url = backendUrl +'/printbc/' + bonCommandeId + '/sc/false';
         
         window.open(url, '_blank');
     });

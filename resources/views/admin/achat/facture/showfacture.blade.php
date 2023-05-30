@@ -52,7 +52,7 @@
                                 </div>
                                 <div class="">
                                     @php
-                                        $fournisseurs = Http::get('https://iker.wiicode.tech/api/fournisseurs/'.$dataFacturee['fournisseur_id']);
+                                        $fournisseurs = Http::get(app('backendUrl').'/fournisseurs/'.$dataFacturee['fournisseur_id']);
                                         $dataFournisseur = $fournisseurs->json()['Fournisseur Requested'];
                                     @endphp
                                     <h6 class="mb-3">Envoyé par:</h6>
@@ -332,6 +332,7 @@ $(document).ready(function() {
     let $statutBadge = $('.statut-dispo');
     let $badgeFacture = $('.statut-paye');
     let factureId = {{ $dataFacturee["id"] }};
+    const backendUrl = "{{ app('backendUrl') }}";
     
     if (confirme == 1) {
         $('#accordionImprimer, #accordionTelecharger, #retourBonLivraison').show();
@@ -367,7 +368,7 @@ $(document).ready(function() {
     $('#confirmationButton').on('click', function() {
         
         $.ajax({
-            url: 'https://iker.wiicode.tech/api/facture/confirme/' + factureId,
+            url: backendUrl +'/facture/confirme/' + factureId,
             method: 'PUT',
             success: function(response) {
                 swal({
@@ -399,7 +400,7 @@ $(document).ready(function() {
 
     function afficherTransactions() {       
         $.ajax({
-            url: 'https://iker.wiicode.tech/api/facture/transactions/' + factureId +'/achat' ,
+            url: backendUrl +'/facture/transactions/' + factureId +'/achat' ,
             type: 'GET',
             success: function(response) {
                 const cardTr = $('.cardTr');
@@ -463,7 +464,7 @@ $(document).ready(function() {
                         $('#transactionModalDetail').modal('show');
                         $('#reglerBoutonConfirmation').on('click', function() {      
                             $.ajax({
-                                url: 'https://iker.wiicode.tech/api/transactions/confirme/' + transactionId,
+                                url: backendUrl +'/transactions/confirme/' + transactionId,
                                 method: 'PUT',
                                 success: function(response) {
                                     const etatPaiement = response.EtatPaiement;
@@ -539,7 +540,7 @@ $(document).ready(function() {
 
     function afficherDetailTransaction(transactionId){
         $.ajax({
-            url: 'https://iker.wiicode.tech/api/transaction/' + transactionId,
+            url: backendUrl +'/transaction/' + transactionId,
             type: 'GET',
             success: function(response) {
                 const transactionNumDetail = response.num_transaction;
@@ -613,7 +614,7 @@ $(document).ready(function() {
 
     function afficherMontantRester() {
         $.ajax({
-            url: 'https://iker.wiicode.tech/api/factureachat/paymentrest/' + factureId,
+            url: backendUrl +'/factureachat/paymentrest/' + factureId,
             type: 'GET',
             success: function(response) {
                 console.log(response)
@@ -629,7 +630,7 @@ $(document).ready(function() {
 
     function afficherDateEtNrTransaction(){
         $.ajax({
-        url: 'https://iker.wiicode.tech/api/transactions/get',
+        url: backendUrl +'/transactions/get',
         type: 'GET',
             success: function(response) {
                 console.log(response);
@@ -742,7 +743,7 @@ $(document).ready(function() {
         console.log(transactionData)
 
         $.ajax({
-            url: 'https://iker.wiicode.tech/api/transaction',
+            url: backendUrl +'/transaction',
             type: 'POST',
             data: transactionData,
             success: function(response) { 
@@ -790,11 +791,11 @@ $(document).ready(function() {
     });
 
     $('#imprimerAcButton').on('click', function() {
-        let url = 'https://iker.wiicode.tech/api/printf/' + factureId + '/false';    
+        let url = backendUrl +'/printf/' + factureId + '/false';    
         window.open(url, '_blank');
     });
     $('#telechargerAcButton').on('click', function() {
-        let url = 'https://iker.wiicode.tech/api/printf/' + factureId + '/true';    
+        let url = backendUrl +'/printf/' + factureId + '/true';    
         window.location.href = url;
     });
 });

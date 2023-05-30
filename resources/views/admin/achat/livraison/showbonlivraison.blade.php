@@ -54,7 +54,7 @@
                                 </div>
                                 <div class="">
                                     @php
-                                        $fournisseurs = Http::get('https://iker.wiicode.tech/api/fournisseurs/'.$dataBonLivraison['fournisseur_id']);
+                                        $fournisseurs = Http::get(app('backendUrl').'/fournisseurs/'.$dataBonLivraison['fournisseur_id']);
                                         $dataFournisseur = $fournisseurs->json()['Fournisseur Requested'];
                                     @endphp
                                     <h6 class="mb-3">Envoyé par:</h6>
@@ -166,6 +166,7 @@ $(document).ready(function() {
     let confirme = {{ $dataBonLivraison['Confirme'] }};
     let $statutBadge = $('.statut-dispo');
     let existe = {{ $dataBonLivraison['id'] }};
+    const backendUrl = "{{ app('backendUrl') }}";
     
     if (confirme == 1) {
         $('#accordionImprimer, #accordionTelecharger, #genererBonReceptionButton , #retourBonCommande').show();
@@ -182,7 +183,7 @@ $(document).ready(function() {
     }
 
     $.ajax({
-        url: 'https://iker.wiicode.tech/api/getblf',
+        url: backendUrl +'/getblf',
         method: 'GET',
         success: function(response) { 
            response.forEach(e => {
@@ -202,7 +203,7 @@ $(document).ready(function() {
         let bonLivraisonId = '{{ $dataBonLivraison["id"] }}';
         
         $.ajax({
-            url: 'https://iker.wiicode.tech/api/bonlivraison/confirme/' + bonLivraisonId,
+            url: backendUrl +'/bonlivraison/confirme/' + bonLivraisonId,
             method: 'PUT',
             success: function(response) {
                 swal({
@@ -239,20 +240,20 @@ $(document).ready(function() {
 
     $('#telechargerAcButton').on('click', function() {
         let bonLivraisonId = '{{ $dataBonLivraison["id"] }}';
-        let url = 'https://iker.wiicode.tech/api/printbl/' + bonLivraisonId + '/true';
+        let url = backendUrl +'/printbl/' + bonLivraisonId + '/true';
         
         window.location.href = url;
     });
     $('#imprimerAcButton').on('click', function() {
         let bonLivraisonId = '{{ $dataBonLivraison["id"] }}';
-        let url = 'https://iker.wiicode.tech/api/printbl/' + bonLivraisonId + '/false';
+        let url = backendUrl +'/printbl/' + bonLivraisonId + '/false';
         
         window.open(url, '_blank');
     });
 
     $('#genererBonReceptionButton').on('click', function() {
         let bonLivraisonId = '{{ $dataBonLivraison["id"] }}';
-        let url = 'https://iker.wiicode.tech/api/printbr/' + bonLivraisonId + '/false';
+        let url = backendUrl +'/printbr/' + bonLivraisonId + '/false';
         
         window.open(url, '_blank');
     });

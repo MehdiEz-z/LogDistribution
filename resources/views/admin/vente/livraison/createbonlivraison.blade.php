@@ -1,7 +1,7 @@
 @extends('admin.layouts.template')
 
 @section('page-title')
-    Facture Achat | Log Dist Du Nord
+    Bon de Livraison | Log Dist Du Nord
 @endsection
 
 @section('admin')
@@ -12,12 +12,12 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Facture Achat</h4>
+                    <h4 class="mb-sm-0">Bon de Livraison</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Log Dist Du Nord</a></li>
-                            <li class="breadcrumb-item active">Facture Achat</li>
+                            <li class="breadcrumb-item active">Bon de Livraison</li>
                         </ol>
                     </div>
 
@@ -29,8 +29,8 @@
             <div class="col">
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between">
-                        Créer une facture
-                        <a href="{{ route('achatFacture')}}" class="btn btn-outline-secondary btn-sm" type="submit">
+                        Créer un bon de livraison
+                        <a href="{{ route('listeLivraisonVente') }}" class="btn btn-outline-secondary btn-sm" type="submit">
                             <i class="ri-arrow-go-back-line"></i>
                         </a>
                     </div>
@@ -39,24 +39,24 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="mb-3 col-lg-4">
-                                    <label class="form-label" for="facturenumero">Numéro du facture</label>
-                                    <input type="text" class="form-control" name="facturenumero" id="facturenumero" value="{{ old('facturenumero')}}"/>
+                                    <label class="form-label" for="blnumero">Numéro du bon de livraison</label>
+                                    <input type="text" class="form-control" name="blnumero" id="blnumero" value="{{ old('blnumero')}}" disabled/>
                                 </div>
                                 <div class="mb-3 col-lg-4">
-                                    <label class="form-label" for="facturebonlivraison">Bon livraison</label>
-                                    <select class="form-select" name="facturebonlivraison" id="facturebonlivraison">
-                                        <option>Selectionner un bon livraison</option>
-                                        @foreach($dataBl as $bl)
-                                            <option value="{{$bl['id']}}">{{$bl['Numero_bonLivraison']}}</option>
+                                    <label class="form-label" for="blboncommande">Bon Commande</label>
+                                    <select class="form-select" name="blboncommande" id="blboncommande">
+                                        <option>Selectionner un bon commande</option>
+                                        @foreach($dataBc as $bc)
+                                            <option value="{{$bc['id']}}">{{$bc['Numero_bonCommandeVente']}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="mb-3 col-lg-4">
-                                    <label class="form-label" for="facturedate">Date</label>
-                                    <input type="date" class="form-control" name="facturedate" id="facturedate" value="{{ old('facturedate')}}"/>
+                                    <label class="form-label" for="bldate">Date</label>
+                                    <input type="text" class="form-control" name="bldate" id="bldate" value="{{ old('bldate')}}" disabled/>
                                 </div>
                             </div>
-                            <table id="facturetable" class="table table-striped table-bordered dt-responsive nowrap mb-4" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
+                            <table id="bltable" class="table table-striped table-bordered dt-responsive nowrap mb-4" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>Reference</th>
@@ -72,25 +72,29 @@
                                 </tbody>
                             </table>
                             <div class="row">
-                                <div class="mb-4 col-lg-4">
-                                    <label class="form-label" for="factureremise">Remise</label>
-                                    <input type="number" class="form-control" name="factureremise" id="factureremise" value=""/>
-                                </div>
+                                <div class="mb-4 col-lg-3">
+                                    <label class="form-label" for="blentrepot">Entrepôt</label>
+                                    <select class="form-select" name="warehouseSelect" id="warehouseSelect"></select>
+                                </div>                               
                                 <div class="mb-4 col-lg-2">
-                                    <label class="form-label" for="facturetva">TVA</label>
-                                    <input type="number" class="form-control" name="facturetva" id="facturetva" value=""/>
+                                    <label class="form-label" for="blremise">Remise</label>
+                                    <input type="number" class="form-control" name="blremise" id="blremise" value="{{ old('blremise')}}"/>
+                                </div>
+                                <div class="mb-4 col-lg-1">
+                                    <label class="form-label" for="bltva">TVA</label>
+                                    <input type="number" class="form-control" name="bltva" id="bltva" value="{{ old('bltva')}}"/>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="mb-3 col-lg-6">
                                     <div class="mb-4">
-                                        <label class="form-label" for="facturenote">Notes</label>
-                                        <textarea class="form-control" name="facturenote" id="facturenote" rows="4"></textarea>
+                                        <label class="form-label" for="blnote">Notes</label>
+                                        <textarea class="form-control" name="blnote" id="blnote" rows="4"></textarea>
                                     </div>
                                     <div>
-                                        <input class="form-check-input" type="checkbox" id="factureconfirm">
+                                        <input class="form-check-input" type="checkbox" id="blconfirm">
                                         <label class="form-check-label ms-2" for="formCheck1">
-                                            Confirmer la facture
+                                            Confirmer le bon livraison
                                         </label>
                                     </div>
                                 </div>
@@ -120,7 +124,7 @@
                         </div>
                         <input type="hidden" class="form-control" name="fournisseurId" id="fournisseurId"/>
                         <div class="card-footer text-center">
-                            <button onclick="sendFacture()" class="btn btn-warning fw-bold text-white">Ajouter la facture</button>
+                            <button onclick="sendLivraison()" class="btn btn-warning fw-bold text-white">Ajouter le bon de livraison</button>
                         </div>
                     </span>
                 </div>
@@ -140,97 +144,114 @@
 
 <script>
     
-    const bonLivraisonSelect = document.getElementById('facturebonlivraison');
-    const numeroInput = document.getElementById('facturenumero');
-    const dateInput = document.getElementById('facturedate');
-    const noteTextarea = document.getElementById('facturenote');
-    const tableBody = document.getElementById('facturetable').getElementsByTagName('tbody')[0];
-    const backendUrl = "{{ app('backendUrl') }}";
+const bonCommandeSelect = document.getElementById('blboncommande');
+const numeroInput = document.getElementById('blnumero');
+const dateInput = document.getElementById('bldate');
+const noteTextarea = document.getElementById('blnote');
+const tableBody = document.getElementById('bltable').getElementsByTagName('tbody')[0];
+const warehouseSelect = document.getElementById('warehouseSelect');
 
-    bonLivraisonSelect.addEventListener('change', function() {
-        const bonLivraisonId = this.value;
+warehouseSelect.disabled = true;
 
-        fetch(backendUrl +`/bonlivraison/${bonLivraisonId}`)
-        .then(response => response.json())
-        .then(data => {
-            console.log(data.Articles);
-            tableBody.innerHTML = '';
+bonCommandeSelect.addEventListener('change', function() {
+const bonCommandeId = this.value;
 
-            const fournisseurId = data.fournisseur_id;
-            let fournisseurIdInput = document.getElementById("fournisseurId");
-            fournisseurIdInput.value = fournisseurId
+    fetch(backendUrl +`/boncommandevente/${bonCommandeId}`)
+    .then(response => response.json())
+    .then(data => {
+        console.log(data.Articles);
+        tableBody.innerHTML = '';
 
-            data.Articles.forEach(article => {
-                let row = tableBody.insertRow();
+        const fournisseurId = data.fournisseur_id;
+        let fournisseurIdInput = document.getElementById('fournisseurId');
+        fournisseurIdInput.value = fournisseurId;
 
-                let idCell = row.insertCell();
-                idCell.innerHTML = article.article_id;
-                idCell.style.display = 'none'
+        data.Articles.forEach(article => {
+            let row = tableBody.insertRow();
 
-                let referenceCell = row.insertCell();
-                referenceCell.textContent = article.reference;
-                
-                let articleCell = row.insertCell();
-                articleCell.textContent = article.article_libelle;
-                
-                let prixUnitaireCell = row.insertCell();
-                let prixUnitaireInput = document.createElement('input');
-                prixUnitaireInput.type = 'number';
-                prixUnitaireInput.name = 'prixUnitaire';
-                prixUnitaireInput.classList.add('form-control');
-                prixUnitaireInput.value = article.Prix_unitaire;
-                prixUnitaireCell.appendChild(prixUnitaireInput);
+            let idCell = row.insertCell();
+            idCell.innerHTML = article.article_id;
+            idCell.style.display = 'none';
 
-                let quantiteCell = row.insertCell();
-                let quantiteInput = document.createElement('input');
-                quantiteInput.type = 'number';
-                quantiteInput.name = 'quantite';
-                quantiteInput.classList.add('form-control');
-                quantiteInput.value = article.Quantity;
-                quantiteCell.appendChild(quantiteInput);
-                
-                let totalHTCell = row.insertCell();
-                totalHTCell.textContent = '0,00 dhs';
-                
-                let deleteCell = row.insertCell();
-                let deleteButton = document.createElement("button");
-                deleteButton.classList.add("btn", "btn-sm", "btn-outline-danger");
-                
-                let deleteIcon = document.createElement("i");
-                deleteIcon.classList.add("fas", "fa-trash-alt");
-                deleteButton.appendChild(deleteIcon);
-                
-                deleteButton.addEventListener('click', function() {
-                    tableBody.removeChild(row);
-                    updateGlobalTotals()
-                });
-                deleteCell.appendChild(deleteButton);
+            let referenceCell = row.insertCell();
+            referenceCell.textContent = article.reference;
 
-                prixUnitaireInput.addEventListener("input", calculTotalHt);
-                quantiteInput.addEventListener("input", calculTotalHt);  
+            let articleCell = row.insertCell();
+            articleCell.textContent = article.article_libelle;
 
-                function calculTotalHt() {
-                    let prixUnitaire = parseFloat(prixUnitaireInput.value);
-                    let quantite = parseInt(quantiteInput.value);
-                    
-                    let totalHt = prixUnitaire * quantite;
-                    if(prixUnitaireInput.value > 0 && quantiteInput.value > 0)
-                        totalHTCell.textContent = totalHt.toFixed(2) + " dhs";
-                    if(prixUnitaireInput.value == 0 || quantiteInput.value== 0)
-                        totalHTCell.textContent = '0,00 dhs';
-                    updateGlobalTotals();
-                }
-                calculTotalHt();
+            let prixUnitaireCell = row.insertCell();
+            let prixUnitaireInput = document.createElement('input');
+            prixUnitaireInput.type = 'number';
+            prixUnitaireInput.name = 'prixUnitaire';
+            prixUnitaireInput.classList.add('form-control');
+            prixUnitaireInput.value = article.Prix_unitaire;
+            prixUnitaireCell.appendChild(prixUnitaireInput);
+
+            let quantiteCell = row.insertCell();
+            let quantiteInput = document.createElement('input');
+            quantiteInput.type = 'number';
+            quantiteInput.name = 'quantite';
+            quantiteInput.classList.add('form-control');
+            quantiteInput.value = article.Quantity;
+            quantiteCell.appendChild(quantiteInput);
+
+            let totalHTCell = row.insertCell();
+            totalHTCell.textContent = '0,00 dhs';
+
+            let deleteCell = row.insertCell();
+            let deleteButton = document.createElement('button');
+            deleteButton.classList.add('btn', 'btn-sm', 'btn-outline-danger');
+
+            let deleteIcon = document.createElement('i');
+            deleteIcon.classList.add('fas', 'fa-trash-alt');
+            deleteButton.appendChild(deleteIcon);
+
+            deleteButton.addEventListener('click', function() {
+                tableBody.removeChild(row);
+                updateGlobalTotals();
             });
-            let remiseInput = document.getElementById('factureremise');
-            remiseInput.value = data.remise;
+            deleteCell.appendChild(deleteButton);
 
-            let tvaInput = document.getElementById('facturetva');
-            tvaInput.value = data.TVA;
+            prixUnitaireInput.addEventListener('input', calculTotalHt);
+            quantiteInput.addEventListener('input', calculTotalHt);
 
-            updateGlobalTotals();
-        })
+            function calculTotalHt() {
+                let prixUnitaire = parseFloat(prixUnitaireInput.value);
+                let quantite = parseInt(quantiteInput.value);
+
+                let totalHt = prixUnitaire * quantite;
+                if (prixUnitaireInput.value > 0 && quantiteInput.value > 0)
+                    totalHTCell.textContent = totalHt.toFixed(2) + ' dhs';
+                if (prixUnitaireInput.value == 0 || quantiteInput.value == 0)
+                    totalHTCell.textContent = '0,00 dhs';
+                updateGlobalTotals();
+            }
+
+            calculTotalHt();
+        });
+
+        fetch(backendUrl +'/warehouse')
+        .then(response => response.json())
+        .then(warehouses => {
+            warehouseSelect.innerHTML = '';
+
+            const emptyOption = document.createElement('option');
+            emptyOption.value = '';
+            emptyOption.textContent = 'Selectionner un Entrepôt';
+            warehouseSelect.appendChild(emptyOption);
+
+            warehouses.forEach(warehouse => {
+                const option = document.createElement('option');
+                option.value = warehouse.id;
+                option.textContent = warehouse.nom_Warehouse;
+                warehouseSelect.appendChild(option);
+            });
+
+            warehouseSelect.disabled = false;
+        });
     });
+});
+
 
 let totalHtGlobalCell = document.querySelector('[data-summary-field="totalht"]');
 let totalRemiseCell = document.querySelector('[data-summary-field="remise"]');
@@ -239,8 +260,8 @@ let totalTtcGlobalCell = document.querySelector('[data-summary-field="totalttc"]
 
 function updateGlobalTotals() {
 
-    let remiseInput = document.querySelector('[name="factureremise"]')
-    let tvaInput = document.querySelector('[name="facturetva"]');
+    let remiseInput = document.querySelector('[name="blremise"]')
+    let tvaInput = document.querySelector('[name="bltva"]');
     remiseInput.addEventListener("input", updateGlobalTotals);
     tvaInput.addEventListener("input", updateGlobalTotals);
     let totalHtGlobal = 0;
@@ -284,18 +305,19 @@ function updateGlobalTotals() {
     totalTtcGlobalCell.textContent = totalTtcGlobal.toFixed(2) + " dhs";
 }
 
-function sendFacture() {
+function sendLivraison() {
 
-    const numeroFacture = numeroInput.value;
+    const numeroBonLivraison = numeroInput.value;
     const totalHtGlobal = totalHtGlobalCell.textContent.replace("dhs", "").trim();
     const totalTvaGlobal = totalTvaGlobalCell.textContent.replace("dhs", "").trim();
     const totalRemiseGlobal = totalRemiseCell.textContent.replace("dhs", "").trim();
     const totalTtcGlobal = totalTtcGlobalCell.textContent.replace("dhs", "").trim();
-    const bonLivraisonId = bonLivraisonSelect.value;
-    const dateFacture = dateInput.value;
-    const noteFacture = noteTextarea.value;
-    const tvaFacture = document.getElementById('facturetva').value;
+    const bonCommandeId = bonCommandeSelect.value;
+    const dateBonLivraison = dateInput.value;
+    const noteBonLivraison = noteTextarea.value;
+    const tvaBonLivraison = document.getElementById('bltva').value;
     const fournisseurId = document.getElementById('fournisseurId').value;
+    const warehouseId = document.getElementById('warehouseSelect').value;
 
     let articles = [];
     let rows = tableBody.rows;
@@ -311,7 +333,6 @@ function sendFacture() {
         let article = {
             article_id: articleId,
             reference: reference,
-            article_libelle: articleName,
             Prix_unitaire: prixUnitaire,
             Quantity: quantite,
             Total_HT: totalHt,
@@ -319,32 +340,31 @@ function sendFacture() {
         articles.push(article);
     }
     let confirmation;
-    if(document.getElementById('factureconfirm').checked) confirmation = 1;
+    if(document.getElementById('blconfirm').checked) confirmation = 1;
     else confirmation = 0;
 
-    let facture = {
-        numero_Facture: numeroFacture,
+    let livraison = {
+        Numero_bonLivraison: numeroBonLivraison,
         Total_HT: totalHtGlobal,
         Total_TVA: totalTvaGlobal,
         Confirme: confirmation,
         remise: totalRemiseGlobal,
-        date_Facture: dateFacture,
+        date_Blivraison: dateBonLivraison,
         Total_TTC: totalTtcGlobal,
-        Total_Rester: totalTtcGlobal,
         fournisseur_id: fournisseurId,
-        Commentaire: noteFacture,
-        TVA : tvaFacture,
-        bonLivraison_id: bonLivraisonId,
-        Code_journal: 'Achat',
+        Commentaire: noteBonLivraison,
+        TVA : tvaBonLivraison,
+        bonCommande_id: bonCommandeId,
+        warehouse_id : warehouseId,
         Articles: articles,
     };
    
-    console.log(facture);
+    console.log(livraison);
 
     $.ajax({
-        url: backendUrl +'/facture',
+        url: backendUrl +'/bonlivraison',
         type: 'POST',
-        data: facture,
+        data: livraison,
         success: function(response) {
             swal({
                 title: response.message,
@@ -355,7 +375,7 @@ function sendFacture() {
                 },
                 closeOnClickOutside: false
             }).then(function() {
-                window.location.href = "{{ env('APP_URL') }}/facture-achat/detail/" + response.id;
+                window.location.href = "{{ env('APP_URL') }}/bon-livraison/detail/" + response.id;
             });
         },
         error: function(response) {
@@ -370,6 +390,25 @@ function sendFacture() {
         }        
     });
 }
+
+$(document).ready(function() {
+
+    $.ajax({
+        url: backendUrl +'/getnblv',
+        type: 'GET',
+        success: function(response) {
+            document.getElementById("blnumero").value = response.num_blv;
+            let today = new Date();
+            let dd = String(today.getDate()).padStart(2, '0');
+            let mm = String(today.getMonth() + 1).padStart(2, '0');
+            let yyyy = today.getFullYear();
+
+            today = yyyy + '-' + mm + '-' + dd;
+            document.getElementById("bldate").value = today;
+        },
+    });
+
+});
 
 </script>
 

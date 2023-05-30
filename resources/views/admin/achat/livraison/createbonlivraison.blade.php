@@ -150,13 +150,14 @@ const dateInput = document.getElementById('bldate');
 const noteTextarea = document.getElementById('blnote');
 const tableBody = document.getElementById('bltable').getElementsByTagName('tbody')[0];
 const warehouseSelect = document.getElementById('warehouseSelect');
+const backendUrl = "{{ app('backendUrl') }}";
 
 warehouseSelect.disabled = true;
 
 bonCommandeSelect.addEventListener('change', function() {
 const bonCommandeId = this.value;
 
-    fetch(`https://iker.wiicode.tech/api/boncommande/${bonCommandeId}`)
+    fetch(backendUrl + `/boncommande/${bonCommandeId}`)
     .then(response => response.json())
     .then(data => {
         console.log(data.Articles);
@@ -230,7 +231,7 @@ const bonCommandeId = this.value;
             calculTotalHt();
         });
 
-        fetch('https://iker.wiicode.tech/api/warehouse')
+        fetch(backendUrl + '/warehouse')
         .then(response => response.json())
         .then(warehouses => {
             warehouseSelect.innerHTML = '';
@@ -362,7 +363,7 @@ function sendLivraison() {
     console.log(livraison);
 
     $.ajax({
-        url: 'https://iker.wiicode.tech/api/bonlivraison',
+        url: backendUrl + '/bonlivraison',
         type: 'POST',
         data: livraison,
         success: function(response) {
@@ -375,7 +376,7 @@ function sendLivraison() {
                 },
                 closeOnClickOutside: false
             }).then(function() {
-                window.location.href = "http://127.0.0.1:8000/bon-livraison/detail/" + response.id;
+                window.location.href = "{{ env('APP_URL') }}/bon-livraison/detail/" + response.id;
             });
         },
         error: function(response) {
