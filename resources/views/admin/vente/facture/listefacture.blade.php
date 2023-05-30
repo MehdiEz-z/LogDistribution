@@ -26,10 +26,10 @@
         </div>
 
         <div class="d-flex mb-3 justify-content-end">
-            <a href="{{ route('createFacture')}}" class="btn btn-warning fw-bold text-white">Saisir une facture</a>
+            <a href="{{ route('createFactureVente')}}" class="btn btn-warning fw-bold text-white">Saisir une facture</a>
         </div>
 
-        {{-- <div class="row">
+        <div class="row">
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
@@ -39,7 +39,7 @@
                                 <tr>
                                     <th>id</th>
                                     <th>N° Facture</th> 
-                                    <th>Fournisseur</th>   
+                                    <th>Client</th>   
                                     <th>Etat</th>  
                                     <th>Total HT</th>
                                     <th>Total TVA</th>
@@ -58,8 +58,8 @@
                                 @foreach($dataFacture as $facture)
                                         <tr>
                                             <td class="text-warning fw-bold">#{{$facture['id']}}</td>
-                                            <td>{{$facture['numero_Facture']}}</td>
-                                            <td>{{$facture['fournisseur']}}</td>
+                                            <td>{{$facture['numero_FactureVente']}}</td>
+                                            <td>{{$facture['nom_Client']}}</td>
                                             <td>
                                                 <span class="statut-dispo badge bg-{{ $facture['EtatPaiement'] === 'impaye' ? 'danger' : ($facture['EtatPaiement'] === 'Paye' ? 'success' : 'info')}} text-white">
                                                     <i class="{{ $facture['EtatPaiement'] === 'impaye' ? 'ri-close-circle-line' : ($facture['EtatPaiement'] === 'Paye' ? 'ri-checkbox-circle-line' : 'ri-radio-button-line')}} align-middle font-size-14 text-white"></i> 
@@ -78,7 +78,7 @@
                                                 </span>
                                             </td> 
                                             <td>
-                                                <a  href="{{route("showFacture",$facture['id'])}}"
+                                                <a  href="{{route("showFactureVente",$facture['id'])}}"
                                                     class="btn btn-outline-primary btn-sm mb-2"
                                                     data-bs-toggle="tooltip"
                                                     data-bs-placement="top"
@@ -87,9 +87,9 @@
                                                 </a>
                                             </td>                                     
                                             <td>{{$facture['remise']}}</td>
-                                            <td>{{$facture['Numero_bonLivraison']}}</td>
+                                            <td>{{$facture['Numero_bonLivraisonVente']}}</td>
                                             <td>
-                                                {{\Carbon\Carbon::parse($facture['date_Facture'])->isoFormat("LL") }}
+                                                {{\Carbon\Carbon::parse($facture['date_FactureVente'])->isoFormat("LL") }}
                                             </td>
                                             
                                         </tr>
@@ -99,7 +99,7 @@
                     </div>
                 </div>
             </div> 
-        </div> --}}
+        </div>
     </div>
     
 </div>
