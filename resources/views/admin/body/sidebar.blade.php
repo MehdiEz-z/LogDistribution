@@ -159,6 +159,52 @@
 
                     </ul>
                 </li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class=" ri-stack-line"></i>
+                        <span>Secteur</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+
+                        <li>
+                            <a href="{{ route('secteurVendeur') }}" class="waves-effect">
+                                <i class="ri-user-location-line"></i>
+                                <span>Vendeur</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('listeSortieSecteur') }}" class="waves-effect">
+                                <i class="ri-clipboard-line"></i>
+                                <span>Bons de sortie</span>
+                            </a>
+                        </li>
+
+                        {{-- <li>
+                            <a href="{{ route('listeLivraisonVente') }}" class="waves-effect">
+                                <i class=" ri-survey-line "></i>
+                                <span>Bons de livraison</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('venteFacture') }}" class="waves-effect">
+                                <i class="ri-newspaper-line"></i>
+                                <span>Facture</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="{{ route('ventePaiement') }}" class="waves-effect">
+                                <i class="  ri-money-euro-box-line"></i>
+                                <span>Paiements</span>
+                            </a>
+                        </li> --}}
+
+                    </ul>
+                </li>
+
                 <li>
                     <a href="{{ route('admindepense') }}" class="waves-effect">
                         <i class="  ri-airplay-line  "></i>

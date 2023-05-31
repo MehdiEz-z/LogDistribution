@@ -183,7 +183,7 @@ $(document).ready(function() {
     }
 
     $.ajax({
-        url: backendUrl +'/getblf',
+        url: backendUrl +'/getblv',
         method: 'GET',
         success: function(response) { 
            response.forEach(e => {

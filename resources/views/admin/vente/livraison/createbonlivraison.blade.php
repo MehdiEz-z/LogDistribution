@@ -155,7 +155,7 @@ const backendUrl = "{{ app('backendUrl') }}";
 warehouseSelect.disabled = true;
 
 bonCommandeSelect.addEventListener('change', function() {
-const bonCommandeId = this.value;
+    const bonCommandeId = this.value;
 
     fetch(backendUrl +`/boncommandevente/${bonCommandeId}`)
     .then(response => response.json())

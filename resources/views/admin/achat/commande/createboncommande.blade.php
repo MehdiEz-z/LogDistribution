@@ -380,7 +380,7 @@ function sendCommande() {
         data: commande,
         success: function(response) {
             swal({
-                title: response.id,
+                title: response.message,
                 icon: "success",
                 button: {
                     text: "OK",

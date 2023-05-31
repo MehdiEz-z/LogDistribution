@@ -8,7 +8,9 @@ use App\Http\Controllers\admin\DepenseController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\admin\WareHouseController;
 use App\Http\Controllers\Admin\Vente\ClientController;
+use App\Http\Controllers\admin\Secteur\VendeurController;
 use App\Http\Controllers\Admin\Article\ArticlesController;
+use App\Http\Controllers\admin\Secteur\BonSortieController;
 use App\Http\Controllers\Admin\Achat\BonReceptionController;
 use App\Http\Controllers\admin\Achat\FactureAchatController;
 use App\Http\Controllers\Admin\Achat\FournisseursController;
@@ -122,9 +124,29 @@ Route::controller(App\Http\Controllers\Admin\Vente\PaiementController::class)->g
 // ----------------------------     Fin Vente     ---------------------------- //
 // --------------------------------------------------------------------------- //
 
+
+// ------------------------------------------------------------------------------ //
+// ----------------------------     Vente Secteur    ---------------------------- //
+
+Route::controller(VendeurController::class)->group(function() {
+    Route::get('/vendeurs', 'ListeVendeur')->name('secteurVendeur');
+});
+
+Route::controller(BonSortieController::class)->group(function() {
+    Route::prefix('/bon-sortie-secteur')->group(function() {
+        Route::get('/', 'listeBonSortie')->name('listeSortieSecteur');
+        Route::get('/nouveau', 'CreateBonSortie')->name('createBonSortie');
+        // Route::get('/detail/{id}', 'ShowFacture')->name('showFactureVente');
+    });
+});
+
+// ---------------------------------------------------------------------------------- //
+// ----------------------------     Fin Vente Secteur    ---------------------------- //
+
 Route::controller(BanqueController::class)->group(function() {
     Route::get('/banque', 'Index')->name('adminbanque');
 });
+
 Route::controller(CaisseController::class)->group(function() {
     Route::get('/Caisse', 'Index')->name('adminCaisse');
 });

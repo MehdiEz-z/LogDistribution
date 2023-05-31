@@ -201,7 +201,9 @@ Banque | Log Dist Du Nord
                  displaydatabank();
             });
     
-
+// setInterval(() => {
+//     displaydatabank();
+// }, 1000);
              function displaydatabank(){
             $.ajax({
                 url: 'https://iker.wiicode.tech/api/bank',
