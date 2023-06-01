@@ -180,9 +180,8 @@ function displaydatastock() {
         success: function(data) {
             console.log(data);
             var tbody = $('.table tbody');
+            tbody.empty();
           
-            // console.log(stockdata[0].id);
-            // Loop over the data array
             for (var i = 0; i < data.length; i++) {
                 var stock = data[i];
                 var row = $('<tr></tr>');
@@ -198,10 +197,7 @@ function displaydatastock() {
                     '<i class="ri-edit-line"></i></button>' +
                     '<div><button onclick="deletestock(' + stock.id + ')" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash-alt"></i></button></div></div>' +
                     '</td>');
-               
-
-                    // '<div><button onclick="deletestock(' + stock.id + ')" class="btn btn-outline-danger btn-sm"> <i class="fas fa-trash-alt"></i></button></div>' +
-                    // '</td>');
+ 
                 tbody.append(row);
             }
         },
@@ -211,7 +207,6 @@ function displaydatastock() {
         }
     });
 }
-    //   for calcule add athor stock 
 
     $(document).ready(function() {
     // Listen for input/change event on the quantity input field

@@ -181,14 +181,14 @@
                             </a>
                         </li>
 
-                        {{-- <li>
-                            <a href="{{ route('listeLivraisonVente') }}" class="waves-effect">
+                        <li>
+                            <a href="{{ route('listeBonSecteur') }}" class="waves-effect">
                                 <i class=" ri-survey-line "></i>
-                                <span>Bons de livraison</span>
+                                <span>Bons de secteur</span>
                             </a>
                         </li>
 
-                        <li>
+                        {{-- <li>
                             <a href="{{ route('venteFacture') }}" class="waves-effect">
                                 <i class="ri-newspaper-line"></i>
                                 <span>Facture</span>

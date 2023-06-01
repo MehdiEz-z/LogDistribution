@@ -30,7 +30,7 @@
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         Créer une facture
-                        <a href="{{ route('achatFacture')}}" class="btn btn-outline-secondary btn-sm" type="submit">
+                        <a href="{{ route('venteFacture')}}" class="btn btn-outline-secondary btn-sm" type="submit">
                             <i class="ri-arrow-go-back-line"></i>
                         </a>
                     </div>

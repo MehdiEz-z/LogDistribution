@@ -16,6 +16,7 @@ use App\Http\Controllers\admin\Achat\FactureAchatController;
 use App\Http\Controllers\Admin\Achat\FournisseursController;
 use App\Http\Controllers\Admin\Article\CategoriesController;
 use App\Http\Controllers\admin\Personnel\EmployesController;
+use App\Http\Controllers\admin\Secteur\BonSecteurController;
 use App\Http\Controllers\admin\Vente\FactureVenteController;
 use App\Http\Controllers\Admin\Personnel\MagaziniersController;
 
@@ -137,6 +138,14 @@ Route::controller(BonSortieController::class)->group(function() {
         Route::get('/', 'listeBonSortie')->name('listeSortieSecteur');
         Route::get('/nouveau', 'CreateBonSortie')->name('createBonSortie');
         Route::get('/detail/{id}', 'ShowBonSortie')->name('showBonSortie');
+    });
+});
+
+Route::controller(BonSecteurController::class)->group(function() {
+    Route::prefix('/bon-vente-secteur')->group(function() {
+        Route::get('/', 'listeBonSecteur')->name('listeBonSecteur');
+        Route::get('/nouveau', 'CreateBonSecteur')->name('createBonSecteur');
+        Route::get('/detail/{id}', 'ShowBonSecteur')->name('showBonSecteur');
     });
 });
 

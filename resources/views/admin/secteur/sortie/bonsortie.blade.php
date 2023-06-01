@@ -43,7 +43,7 @@
                                     <th>Aide Vendeur 1</th>   
                                     <th>Aide Vendeur 2</th>   
                                     <th>Camion</th>
-                                    <th>Entrepôt</th>
+                                    <th>Secteur</th>
                                     <th>Confirmé</th>
                                     <th>Date</th>
                                     <th>Détail</th>
@@ -67,7 +67,7 @@
                                             <td>-</td>
                                         @endif
                                         <td>{{$bonsortie['matricule']}}</td>
-                                        <td>{{$bonsortie['nom_Warehouse']}}</td>
+                                        <td>{{$bonsortie['secteur']}}</td>
                                         <td>
                                             <span class="statut-dispo badge bg-{{ $bonsortie['Confirme'] == 1 ? 'success' : 'danger' }} text-white">
                                                 <i class="{{ $bonsortie['Confirme'] == 1 ? 'ri-checkbox-circle-line' : 'ri-close-circle-line' }} align-middle font-size-14 text-white"></i> 
@@ -78,7 +78,7 @@
                                             {{\Carbon\Carbon::parse($bonsortie['dateSortie'])->isoFormat("LL") }}
                                         </td>
                                         <td>
-                                            <a  href=""
+                                            <a  href="{{ route('showBonSortie',$bonsortie['id'])}}"
                                                 class="btn btn-outline-primary btn-sm mb-2"
                                                 data-bs-toggle="tooltip"
                                                 data-bs-placement="top"

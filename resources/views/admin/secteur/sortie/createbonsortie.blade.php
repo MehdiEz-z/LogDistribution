@@ -479,7 +479,7 @@ $(document).ready(function() {
     });
 
     $.ajax({
-        url: backendUrl +'/getbs',
+        url: backendUrl +'/getnbs',
         type: 'GET',
         success: function(response) {
             console.log(response);
