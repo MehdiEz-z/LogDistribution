@@ -136,7 +136,7 @@ Route::controller(BonSortieController::class)->group(function() {
     Route::prefix('/bon-sortie-secteur')->group(function() {
         Route::get('/', 'listeBonSortie')->name('listeSortieSecteur');
         Route::get('/nouveau', 'CreateBonSortie')->name('createBonSortie');
-        // Route::get('/detail/{id}', 'ShowFacture')->name('showFactureVente');
+        Route::get('/detail/{id}', 'ShowBonSortie')->name('showBonSortie');
     });
 });
 

@@ -43,11 +43,11 @@
                                     <input type="text" class="form-control" name="bsnumero" id="bsnumero" value="{{ old('bsnumero')}}" disabled/>
                                 </div>
                                 <div class="mb-3 col-lg-4">
-                                    <label class="form-label" for="bsentrepot">Entrepôt</label>
-                                    <select class="form-select" name="bsentrepot" id="bsentrepot">
-                                        <option value="">Selectionner un entrepôt</option>
-                                        @foreach($dataentrepot as $entrepot)
-                                            <option value="{{$entrepot['id']}}">{{$entrepot['nom_Warehouse']}}</option>
+                                    <label class="form-label" for="bssecteur">Secteur</label>
+                                    <select class="form-select" name="bssecteur" id="bssecteur">
+                                        <option value="">Selectionner un secteur</option>
+                                        @foreach($datasecteur as $secteur)
+                                            <option value="{{$secteur['id']}}">{{$secteur['secteur']}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -154,7 +154,7 @@
 
 <script>
 
-    const warehouseSelect = document.getElementById('bsentrepot');
+    const secteurSelect = document.getElementById('bssecteur');
     const vendeurSelect = document.getElementById('bsvendeur');
     const aideVendeurOneSelect = document.getElementById('bsaidvendeur1');
     const aideVendeurTwoSelect = document.getElementById('bsaidvendeur2');
@@ -199,7 +199,7 @@
     }
 
     function checkConditions() {
-        if (referenceInput.value == '' || warehouseSelect.value == '' || dateSelect.value == '') {
+        if (referenceInput.value == '' || secteurSelect.value == '' || dateSelect.value == '') {
             disableArticleSelect();
             disableVendeurSelect();
             disableAideVendeurOneSelect();
@@ -210,7 +210,7 @@
         }
     }
 
-    warehouseSelect.addEventListener('change', function() {
+    secteurSelect.addEventListener('change', function() {
         
         fetch(backendUrl +'/vendeur')
         .then(response => response.json())
@@ -229,7 +229,6 @@
                 vendeurSelect.appendChild(option);
             });
         });
-
         checkConditions();
     });
 
@@ -254,8 +253,8 @@
                     aideVendeurOneSelect.appendChild(option);
                 }
             });
-            enableAideVendeurOneSelect();
-        });       
+        });  
+        enableAideVendeurOneSelect();     
         checkConditions();
     });
 
@@ -281,8 +280,8 @@
                     aideVendeurTwoSelect.appendChild(option);
                 }
             });
-            enableAideVendeurTwoSelect();
         });
+        enableAideVendeurTwoSelect();
         checkConditions();
     });
 
@@ -374,100 +373,96 @@
     });
     
 
-// function sendSortie() {
-//     let selectedValues = [];
-//     let selectBox = document.getElementById("bsarticle");
-//     for (let i = 0; i < selectBox.options.length; i++) {
-//         if (selectBox.options[i].selected) {
-//             selectedValues.push(selectBox.options[i].value);
-//         }
-//     }
-//     const numeroBonsortie = document.getElementById('bsnumero').value;
-//     const totalHtGlobal = totalHtGlobalCell.textContent.replace("dhs", "").trim();
-//     const totalTvaGlobal = totalTvaGlobalCell.textContent.replace("dhs", "").trim();
-//     const totalRemiseGlobal = totalRemiseCell.textContent.replace("dhs", "").trim();
-//     const totalTtcGlobal = totalTtcGlobalCell.textContent.replace("dhs", "").trim();
-//     const fournisseurId = fournisseurSelect.value;
-//     const dateBonsortie = dateSelect.value;
-//     const noteBonsortie = document.getElementById('bsnote').value;
-//     const tvaBonsortie = document.getElementById('bstva').value;
+function sendSortie() {
+    let selectedValues = [];
+    let selectBox = document.getElementById("bsarticle");
+    for (let i = 0; i < selectBox.options.length; i++) {
+        if (selectBox.options[i].selected) {
+            selectedValues.push(selectBox.options[i].value);
+        }
+    }
+    const numeroBonsortie = document.getElementById('bsnumero').value;
+    const secteurId = secteurSelect.value;
+    const vendeurId = vendeurSelect.value;
+    const aideVendeurOneId = aideVendeurOneSelect.value;
+    const aideVendeurTwoId = aideVendeurTwoSelect.value;
+    const camion = camionSelect.value;
+    const dateBonsortie = dateSelect.value;
+    const noteBonsortie = document.getElementById('bsnote').value;
 
-//     let articles = [];
-//     let rows = table.rows;
-//     for (let i = 1; i < rows.length; i++) {
-//         let cells = rows[i].cells;
-//         let idarticle = cells[0].textContent;
-//         let reference = cells[1].textContent;
-//         let articleName = cells[2].textContent;
-//         let prixUnitaire = cells[3].querySelector("input[name='prixUnitaire']").value;
-//         let quantite = cells[4].querySelector("input[name='quantite']").value;
-//         let totalHt = cells[5].textContent.replace("dhs", "").trim();
+    let articles = [];
+    let rows = table.rows;
+    for (let i = 1; i < rows.length; i++) {
+        let cells = rows[i].cells;
+        let idarticle = cells[0].textContent;
+        let reference = cells[1].textContent;
+        let articleName = cells[2].textContent;
+        let quantite = cells[3].querySelector("input[name='quantite']").value;
 
-//         let article = {
-//             article_id: idarticle,
-//             Prix_unitaire: prixUnitaire,
-//             Quantity: quantite,
-//             Total_HT: totalHt,
-//         };
-//         articles.push(article);
-//     }
-//     let confirmation;
-//     if(document.getElementById('bsconfirm').checked) confirmation = 1;
-//     else confirmation = 0;
+        let article = {
+            article_id: idarticle,
+            QuantitySortie: quantite,
+            article_libelle: articleName,
+            unite: 'P12',
+        };
+        articles.push(article);
+    }
+    let confirmation;
+    if(document.getElementById('bsconfirm').checked) confirmation = 1;
+    else confirmation = 0;
 
-//     let sortie = {
-//         Numero_bonsortie: numeroBonsortie,
-//         Total_HT: totalHtGlobal,
-//         Total_TVA: totalTvaGlobal,
-//         Confirme: confirmation,
-//         remise: totalRemiseGlobal,
-//         date_bsommande: dateBonsortie,
-//         Total_TTC: totalTtcGlobal,
-//         fournisseur_id: fournisseurId,
-//         Commentaire: noteBonsortie,
-//         TVA : tvaBonsortie,
-//         Articles: articles
-//     };
+    let sortie = {
+        reference: numeroBonsortie,
+        Confirme: confirmation,
+        dateSortie: dateBonsortie,
+        secteur_id: secteurId,
+        vendeur_id: vendeurId,
+        aideVendeur_id: (aideVendeurOneId) ? aideVendeurOneId : null,
+        aideVendeur2_id: (aideVendeurTwoId) ? aideVendeurTwoId : null,
+        camion_id: camion,
+        Commentaire: noteBonsortie,
+        Articles: articles
+    };
    
-//     console.log(sortie);
+    console.log(sortie);
 
-//     $.ajax({
-//         url: backendUrl +'/bonsortie',
-//         type: 'POST',
-//         data: sortie,
-//         success: function(response) {
-//             swal({
-//                 title: response.message,
-//                 icon: "success",
-//                 button: {
-//                     text: "OK",
-//                     className: "btn btn-success" 
-//                 },
-//                 closeOnClickOutside: false
-//             }).then(function() {
-//                 window.location.href = "{{ env('APP_URL') }}/bon-sortie-achat/detail/" + response.id;
-//             });
-//         },
-//         error: function(response) {
-//             swal({
-//                 title: response.responseJSON.message,
-//                 icon: "warning",
-//                 button: "OK",
-//                 dangerMode: true,
-//                 closeOnClickOutside: false
-//             });
-//         }        
-//     });
+    $.ajax({
+        url: backendUrl +'/bonsortie',
+        type: 'POST',
+        data: sortie,
+        success: function(response) {
+            swal({
+                title: response.message,
+                icon: "success",
+                button: {
+                    text: "OK",
+                    className: "btn btn-success" 
+                },
+                closeOnClickOutside: false
+            }).then(function() {
+                window.location.href = "{{ env('APP_URL') }}/bon-sortie-secteur/detail/" + response.id;
+            });
+        },
+        error: function(response) {
+            swal({
+                title: response.responseJSON.message,
+                icon: "warning",
+                button: "OK",
+                dangerMode: true,
+                closeOnClickOutside: false
+            });
+        }        
+    });
 
-// }
+}
 
 $(document).ready(function() {
 
-    $('#bsentrepot').on('change', function() {
-        const warehouseId = $(this).val();
+    $('#bssecteur').on('change', function() {
+        const secteurId = $(this).val();
         
         $.ajax({
-            url: backendUrl +'/articlewr/' + warehouseId,
+            url: backendUrl +'/articlewr/' + secteurId,
             type: 'GET',
             dataType: 'json',
             success: function(response) {

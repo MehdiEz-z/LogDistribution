@@ -16,18 +16,19 @@ class BonSortieController extends Controller
     }
 
     public function CreateBonSortie(){
-        $vendeurs = Http::get(app('backendUrl').'/vendeur');
-        $dataVendeur = $vendeurs->json();
+        $secteurs = Http::get(app('backendUrl').'/secteur');
+        $datasecteur = $secteurs->json();
 
-        $entrepots = Http::get(app('backendUrl').'/warehouse');
-        $dataentrepot = $entrepots->json();
+        return view('admin.secteur.sortie.createbonsortie',compact('datasecteur'));
+    }
 
-        $camions = Http::get(app('backendUrl').'/camion');
-        $datacamion = $camions->json();
-        
-        $articles = Http::get(app('backendUrl').'/articles');
-        $dataArticle = $articles->json()['data'];
+    public function ShowBonSortie($id){
+        $bonsortie = Http::get(app('backendUrl').'/bonsortie/'.$id);
+        $dataBonSortie = $bonsortie->json();
 
-        return view('admin.secteur.sortie.createbonsortie',compact('dataVendeur','dataentrepot','dataArticle','datacamion'));
+        $societe = Http::get(app('backendUrl').'/societe');
+        $dataSociete = $societe->json();
+
+        return view('admin.secteur.sortie.showbonsortie',compact('dataBonSortie','dataSociete'));
     }
 }
