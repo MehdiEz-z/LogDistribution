@@ -97,7 +97,17 @@ Banque | Log Dist Du Nord
                                     <option  > selectionnez un type de transaction  </option>
                                     <option value="withdraw" > Retrait</option>
                                     <option value="depots" > Dépôts </option>
+                                    <option value="transfert" > Transfert  </option>
                                    
+                                </select>
+                            </div>
+                            <div class="mb-3 col-lg-6" id="journallabel">
+                                <label class="form-label" for="journal" >Jornal </label>
+                                <select class="form-select" name="journal" id="journal">
+                                    <option  > selectionnez un jornal  </option>
+                              @foreach ( $allJournals as $journal )
+                              <option value="{{ $journal['id'] }}" > {{ $journal['Code_journal']}} </option>
+                              @endforeach
                                 </select>
                             </div>
                             <div class="mb-3 col-lg-6" id="sourcetransactionlabel">
@@ -147,15 +157,15 @@ Banque | Log Dist Du Nord
         </div>
     @endif
 
-
-
-
+      
+ 
         <div class="row">
             <div class="col-12">
-                <div class="card">
+                   @include('admin.redirects.Banque.card_banque');
+                {{-- <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-centered mb-0 align-middle table-hover table-nowrap text-center">
+                            {{-- <table class="table table-centered mb-0 align-middle table-hover table-nowrap text-center">
                                 <thead>
                                     <tr>
                                         <th>id</th>
@@ -174,10 +184,10 @@ Banque | Log Dist Du Nord
                                     <tr>                                   
                                     </tr>
                                 </tbody>
-                            </table>
-                        </div>
+                            </table> --}}
+                        {{-- </div>
                     </div>
-                </div>
+                </div>  --}}
             </div>
         </div>
     </div>
@@ -198,48 +208,47 @@ Banque | Log Dist Du Nord
             }
                 
             $(document).ready(function(){ 
-                 displaydatabank();
+                cardbank();
             });
     
-// setInterval(() => {
-//     displaydatabank();
-// }, 1000);
-             function displaydatabank(){
-            $.ajax({
-                url: 'https://iker.wiicode.tech/api/bank',
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                var tbody = $('.table tbody');
-                tbody.empty(); // Clear the existing table body
-                // Loop over the data array
-                for (var i = 0; i < data.length; i++) {
-                var bank = data[i];
-                var row = $('<tr></tr>');
 
-                row.append('<td class="text-warning fw-bold">' + bank.id + '</td>');
-                row.append('<td class="TdBanque">' + bank.nomBank + '</td>');
-                row.append('<td class="TdTelephone">' + bank.telephone + '</td>');
-                row.append('<td class="TdAdresse">' + bank.adresse + '</td>');
-                row.append('<td class="TdNumeroCompt">' + bank.numero_compt + '</td>');
-                row.append('<td class="TdRIBCompt">' + bank.rib_compt + '</td>');
-                row.append('<td class="TdSolde">' + bank.solde + '</td>');
-                row.append('<td class="TdCommentaire">' + bank.Commentaire + '</td>');
-                row.append('<td>' +
-                    '<a onclick="editbank(' + bank.id + ')" class="btn btn-outline-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
-                    '<i class="fas fa-info-circle  mx-2"></i></a>' +
-                    '<div><button onclick="addsoldebank(' + bank.id + ')" class="btn btn-outline-success btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
-                    '<span class="icon-with-flag"> <i class="fas fa-exchange-alt mx-1 "></i><i class="fas fa-dollar-sign flag-icon"></i></span></button> </div>' +
-                    '</td>');
+        //      function displaydatabank(){
+        // //     $.ajax({
+        // //         url: 'https://iker.wiicode.tech/api/bank',
+        // //         type: 'GET',
+        // //         dataType: 'json',
+        // //         success: function(data) {
+        // //             console.log(data)
+        // //         var tbody = $('.table tbody');
+        // //         tbody.empty(); // Clear the existing table body
+        // //         // Loop over the data array
+        // //         for (var i = 0; i < data.length; i++) {
+        // //         var bank = data[i];
+        // //         var row = $('<tr></tr>');
 
-                tbody.append(row);
-            }
-        },
-        error: function() {
-            console.error("Error fetching data.");
-        }
-            });
-        }
+        // //         row.append('<td class="text-warning fw-bold">' + bank.id + '</td>');
+        // //         row.append('<td class="TdBanque">' + bank.nomBank + '</td>');
+        // //         row.append('<td class="TdTelephone">' + bank.telephone + '</td>');
+        // //         row.append('<td class="TdAdresse">' + bank.adresse + '</td>');
+        // //         row.append('<td class="TdNumeroCompt">' + bank.numero_compt + '</td>');
+        // //         row.append('<td class="TdRIBCompt">' + bank.rib_compt + '</td>');
+        // //         row.append('<td class="TdSolde">' + bank.solde + '</td>');
+        // //         row.append('<td class="TdCommentaire">' + bank.Commentaire + '</td>');
+        // //         row.append('<td>' +
+        // //             '<a onclick="editbank(' + bank.id + ')" class="btn btn-outline-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
+        // //             '<i class="fas fa-info-circle  mx-2"></i></a>' +
+        // //             '<div><button onclick="addsoldebank(' + bank.id + ')" class="btn btn-outline-success btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
+        // //             '<span class="icon-with-flag"> <i class="fas fa-exchange-alt mx-1 "></i><i class="fas fa-dollar-sign flag-icon"></i></span></button> </div>' +
+        // //             '</td>');
+
+        // //         tbody.append(row);
+        // //     }
+        // // },
+        // // error: function() {
+        // //     console.error("Error fetching data.");
+        // // }
+        // //     });
+        // }
 
 
 
@@ -262,6 +271,7 @@ Banque | Log Dist Du Nord
             $("#motiflabel").hide()
             $("#sourcetransactionlabel").hide()
             $("#typetransactionlabel").hide()
+            $("#journallabel").hide()
             $("#namebanklabel").show();
             $("#telelabel").show();
             $("#adresslabel").show();
@@ -296,7 +306,10 @@ Banque | Log Dist Du Nord
                     console.log(response);
                     swal(response.message, "", "success");
                    $(".magazinierModal").modal('hide')
-                    displaydatabank();
+                   cardbank();
+                    loadOperations();   
+                   loadTransactions();
+              
                     },
                     error: function(response) {
                         console.log(response.responseJSON.message);
@@ -396,6 +409,7 @@ Banque | Log Dist Du Nord
             $("#soldelabel").show();
             $("#motiflabel").show();
             $("#sourcetransactionlabel").show();
+            $("#journallabel").show()
             $("#typetransactionlabel").show();
             $('input[type="text"]').each(function() {
               $(this).val('');
@@ -412,6 +426,7 @@ Banque | Log Dist Du Nord
                     $("#myLargeModalLabel").text('Affecter une operation A  '+ data.nomBank +' ');
                     $('input[name="sourcetransaction"]').prop("readonly", true);
                     $("#typetransaction").val($("#typetransaction option:first").val());
+                    $("#journallabel").val($("#journallabel option:first").val());
                     $("#sourcetransaction").val('Compte Bancaire')
 
                 },
@@ -425,6 +440,7 @@ Banque | Log Dist Du Nord
         function addsoldetobank(){
         var typetransaction = $('#typetransaction').val();
         // var sourcetransaction = $('#sourcetransaction').val();
+        var journal = $('#journal').val();
         var solde = $('#solde').val();
         var motif = $('#motif').val();
 
@@ -435,14 +451,17 @@ Banque | Log Dist Du Nord
                 type: typetransaction,
                 mode : 'bank',
                 motif: motif,
-                solde: solde
+                solde: solde,
+                journal_id : journal,
             },
             success: function(response) {
                 // Handle the success response
                 $(".magazinierModal").modal('hide')
-                   swal(response.message, "", "success");
-                   displaydatabank();
-            },
+                   swal(response.message, "", "success"); 
+                     cardbank();
+                    loadOperations();        
+                   loadTransactions();     
+                   },
             error: function(response) {
                 // Handle the error response
                 swal(response.responseJSON.message, "", "warning");

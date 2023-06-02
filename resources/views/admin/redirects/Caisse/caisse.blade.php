@@ -71,7 +71,16 @@ Caisse | Log Dist Du Nord
                                     <option  > selectionnez un type de transaction  </option>
                                     <option value="withdraw" > Retrait</option>
                                     <option value="depots" > Dépôts </option>
-                                   
+                                    <option value="transfert" > Transfert </option>
+                                </select>
+                            </div>
+                            <div class="mb-3 col-lg-6" id="journallabel">
+                                <label class="form-label" for="journal" >Jornal </label>
+                                <select class="form-select" name="journal" id="journal">
+                                    <option  > selectionnez un jornal  </option>
+                              @foreach ( $allJournals as $journal )
+                              <option value="{{ $journal['id'] }}" > {{ $journal['Code_journal']}} </option>
+                              @endforeach
                                 </select>
                             </div>
                             <div class="mb-3 col-lg-6" id="sourcetransactionlabel">
@@ -128,7 +137,8 @@ Caisse | Log Dist Du Nord
 
         <div class="row">
             <div class="col-12">
-                <div class="card">
+                @include('admin.redirects.Caisse.card_caisse');
+                {{-- <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id= "tableButton" class="table table-centered mb-0 align-middle table-hover table-nowrap text-center">
@@ -150,7 +160,7 @@ Caisse | Log Dist Du Nord
                             </table>
                         </div>
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
@@ -171,40 +181,42 @@ Caisse | Log Dist Du Nord
             }
                 
             $(document).ready(function() {
-                getData();
-            });
+                displayCaisseCards();
+                // loadOperations();
 
-  function getData() {
-    $.ajax({
-      url: 'https://iker.wiicode.tech/api/caisse', // Endpoint URL
-      type: 'GET',
-      dataType: 'json',
-      success: function(response) {
-        console.log(response);
+                        });
 
-        var tbody = $('#tableButton tbody');
-        tbody.empty();
+//   function getData() {
+//     $.ajax({
+//       url: 'https://iker.wiicode.tech/api/caisse', // Endpoint URL
+//       type: 'GET',
+//       dataType: 'json',
+//       success: function(response) {
+//         console.log(response);
 
-        for (var i = 0; i < response.length; i++) {
-          var data = response[i];
+//         var tbody = $('#tableButton tbody');
+//         tbody.empty();
 
-          var row = $('<tr>');
-          row.append($('<td>').text(data.id));
-          row.append($('<td>').text(data.solde));
-          row.append($('<td>').text(data.commentaire));
-          row.append($('<td>').text(data.type));
-            row.append('<td>' +
-                    '<div><button onclick="addsoldecaisse(' + data.id + ')" class="btn btn-outline-success btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
-                    '<span class="icon-with-flag"> <i class="fas fa-exchange-alt mx-1 "></i><i class="fas fa-dollar-sign flag-icon"></i></span></button> </div>' +
-                    '</td>');
-          tbody.append(row);
-        }
-      },
-      error: function() {
-        console.error("Error retrieving data.");
-      }
-    });
-  }
+//         for (var i = 0; i < response.length; i++) {
+//           var data = response[i];
+
+//           var row = $('<tr>');
+//           row.append($('<td>').text(data.id));
+//           row.append($('<td>').text(data.solde));
+//           row.append($('<td>').text(data.commentaire));
+//           row.append($('<td>').text(data.type));
+//             row.append('<td>' +
+//                     '<div><button onclick="addsoldecaisse(' + data.id + ')" class="btn btn-outline-success btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
+//                     '<span class="icon-with-flag"> <i class="fas fa-exchange-alt mx-1 "></i><i class="fas fa-dollar-sign flag-icon"></i></span></button> </div>' +
+//                     '</td>');
+//           tbody.append(row);
+//         }
+//       },
+//       error: function() {
+//         console.error("Error retrieving data.");
+//       }
+//     });
+//   }
 
 
 
@@ -228,6 +240,7 @@ Caisse | Log Dist Du Nord
             $("#motiflabel").hide()
             $("#sourcetransactionlabel").hide()
             $("#typetransactionlabel").hide()
+            $("#journallabel").hide()
             $("#typelabel").show();
             $("#commelabel").show();
             $("#soldelabeltransfer").hide();
@@ -260,8 +273,6 @@ Caisse | Log Dist Du Nord
     success: function(response) {
       console.log(response);
 
-      // Reset form fields
-    //   $('#caisseForm')[0].reset();
       // Optionally, close the modal
       $('.caisseModal').modal('hide');
       swal(response.message, "", "success");
@@ -287,6 +298,7 @@ function addsoldecaisse(id) {
             $("#motiflabel").show()
             $("#sourcetransactionlabel").show()
             $("#typetransactionlabel").show()
+            $("#journallabel").show()
             $("#typelabel").hide();
             $("#commelabel").hide();
             $("#soldelabeltransfer").show();
@@ -299,11 +311,14 @@ function addsoldecaisse(id) {
             });
           $('input[name="sourcetransaction"]').prop("readonly", true);
           $("#typetransaction").val($("#typetransaction option:first").val());
+          $("#journallabel").val($("#journallabel option:first").val());
          $("#sourcetransaction").val('La caisse');     
           
         }
         function addsoldetocaisse(){
         var typetransaction = $('#typetransaction').val();
+        var journal = $('#journal').val();
+
         // var sourcetransaction = $('#sourcetransaction').val();
         var solde = $('#solde').val();
         var motif = $('#motif').val();
@@ -315,13 +330,15 @@ function addsoldecaisse(id) {
                 type: typetransaction,
                 mode : 'caisse',
                 motif: motif,
-                solde: solde
+                solde: solde,
+                journal_id : journal,
             },
             success: function(response) {
                 // Handle the success response
                 $(".caisseModal").modal('hide')
                    swal(response.message, "", "success");
-                  getData();
+                   displayCaisseCards();
+                   loadOperations();
             },
             error: function(response) {
                 // Handle the error response
