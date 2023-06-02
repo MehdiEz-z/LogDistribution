@@ -42,11 +42,11 @@
                                 @endforeach
                             </div>
                             <div>
-                                <h4 class="fw-semibold mb-2">BON COMMANDE {{$dataBonCommande['Numero_bonCommande']}}</h4>
+                                <h4 class="fw-semibold mb-2">BON COMMANDE {{$dataBonCommande['Numero_bonCommandeVente']}}</h4>
                                 <div class="mb-4 pt-1 d-flex">
                                     <span class="pe-2">Date: </span>
                                     <span class="fw-semibold pe-3">
-                                        {{\Carbon\Carbon::parse($dataBonCommande['date_BCommande'])->isoFormat("LL") }}
+                                        {{\Carbon\Carbon::parse($dataBonCommande['date_BCommandeVente'])->isoFormat("LL") }}
                                     </span>
                                     <span class="statut-dispo d-flex align-items-center badge text-white">
 
@@ -54,14 +54,14 @@
                                 </div>
                                 <div class="">
                                     @php
-                                        $fournisseurs = Http::get(app('backendUrl').'/fournisseurs/'.$dataBonCommande['fournisseur_id']);
-                                        $dataFournisseur = $fournisseurs->json()['Fournisseur Requested'];
+                                        $client = Http::get(app('backendUrl').'/client/'.$dataBonCommande['client_id']);
+                                        $dataClient = $client->json()['client'];
                                     @endphp
                                     <h6 class="mb-3">Envoyé à:</h6>
-                                    <p class="mb-2">{{ $dataFournisseur['fournisseur'] }}</p>
-                                    <p class="mb-2">{{ $dataFournisseur['Adresse'] }}</p>
-                                    <p class="mb-2">{{ $dataFournisseur['Telephone'] }}</p>
-                                    <p class="mb-0">{{ $dataFournisseur['email'] }}</p>
+                                    <p class="mb-2">{{ $dataClient['nom_Client'] }}</p>
+                                    <p class="mb-2">{{ $dataClient['adresse_Client'] }}</p>
+                                    <p class="mb-2">{{ $dataClient['telephone_Client'] }}</p>
+                                    <p class="mb-0">{{ $dataClient['email_Client'] }}</p>
                                 </div>
                             </div>
                         </div>
@@ -125,7 +125,7 @@
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         Actions
-                        <a href="{{ route('listeCommande') }}" class="btn btn-outline-secondary btn-sm" type="submit">
+                        <a href="{{ route('listeCommandeVente') }}" class="btn btn-outline-secondary btn-sm" type="submit">
                             <i class="ri-arrow-go-back-line"></i>
                         </a>
                     </div>
@@ -174,8 +174,8 @@
                         </div>
                         <button class="btn btn-light fw-bold text-secondary col-12 mb-2" id="confirmationButton">Confirmer</button>
                         <button id="genererBonLivraisonButton" class="btn btn-light fw-bold text-secondary col-12">Generer Bon Livraison</button>
-                        @if( $dataBonCommande['bonLivraison_id'] != null )
-                            <a href="{{ route('showLivraison', $dataBonCommande["bonLivraison_id"] )}}" id="goLivraison" class="btn btn-warning fw-bold text-white col-12">Bon Livraison</a>
+                        @if( $dataBonCommande['bonLivraisonVente_id'] != null )
+                            <a href="{{ route('showLivraisonVente', $dataBonCommande["bonLivraisonVente_id"] )}}" id="goLivraison" class="btn btn-warning fw-bold text-white col-12">Bon Livraison</a>
                         @endif
                     </div>
                 </div>
@@ -194,13 +194,14 @@
 
 <script>
 
+const backendUrl = "{{ app('backendUrl') }}";
+
 $(document).ready(function() {
     $('#accordionImprimer, #accordionTelecharger, #genererBonLivraisonButton').hide();
 
     let confirme = {{ $dataBonCommande['Confirme'] }};
     let $statutBadge = $('.statut-dispo');
-    let existe = {{ $dataBonCommande['id'] }};
-    const backendUrl = "{{ app('backendUrl') }}";
+    let bonCommandeId = {{ $dataBonCommande["id"] }};
     
     if (confirme == 1) {
         $('#accordionImprimer, #accordionTelecharger').show();
@@ -215,11 +216,11 @@ $(document).ready(function() {
     }
 
     $.ajax({
-        url: backendUrl +'/getbc',
+        url: backendUrl + '/getbcv',
         method: 'GET',
         success: function(response) {
            response.forEach(e => {
-                if (e.id == existe) {
+                if (e.id == bonCommandeId) {
                     $('#genererBonLivraisonButton').show();
                 }
             });
@@ -230,10 +231,9 @@ $(document).ready(function() {
     }); 
 
     $('#confirmationButton').on('click', function() {
-        let bonCommandeId = '{{ $dataBonCommande["id"] }}';
         
         $.ajax({
-            url: backendUrl +'/boncommande/confirme/' + bonCommandeId,
+            url: backendUrl + '/boncommandevente/confirme/' + bonCommandeId,
             method: 'PUT',
             success: function(response) {
                 swal({
@@ -264,36 +264,32 @@ $(document).ready(function() {
     });
 
     $('#genererBonLivraisonButton').on('click', function() {
-        let url = '{{ route("createLivraison") }}';
+        let url = '{{ route("createLivraisonVente") }}';
         window.location.href = url;
     });
 
 
 
     $('#telechargerAcButton').on('click', function() {
-        let bonCommandeId = '{{ $dataBonCommande["id"] }}';
-        let url = backendUrl +'/printbc/' + bonCommandeId + '/ac/true';
+        let url = backendUrl + '/printbcv/' + bonCommandeId + '/ac/true';
         
         window.location.href = url;
     });
     
     $('#telechargerScButton').on('click', function() {
-        let bonCommandeId = '{{ $dataBonCommande["id"] }}';
-        let url = backendUrl +'/printbc/' + bonCommandeId + '/sc/true';
+        let url = backendUrl + '/printbcv/' + bonCommandeId + '/sc/true';
         
         window.location.href = url;
     });
 
     $('#imprimerAcButton').on('click', function() {
-        let bonCommandeId = '{{ $dataBonCommande["id"] }}';
-        let url = backendUrl +'/printbc/' + bonCommandeId + '/ac/false';
+        let url = backendUrl + '/printbcv/' + bonCommandeId + '/ac/false';
         
         window.open(url, '_blank');
     });
     
     $('#imprimerScButton').on('click', function() {
-        let bonCommandeId = '{{ $dataBonCommande["id"] }}';
-        let url = backendUrl +'/printbc/' + bonCommandeId + '/sc/false';
+        let url = backendUrl + '/printbcv/' + bonCommandeId + '/sc/false';
         
         window.open(url, '_blank');
     });

@@ -1,7 +1,7 @@
 @extends('admin.layouts.template')
 
 @section('page-title')
-    Facture Achat | Log Dist Du Nord
+    Facture Vente | Log Dist Du Nord
 @endsection
 
 @section('admin')
@@ -12,12 +12,12 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Facture Achat</h4>
+                    <h4 class="mb-sm-0">Facture Vente</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Log Dist Du Nord</a></li>
-                            <li class="breadcrumb-item active">Facture Achat</li>
+                            <li class="breadcrumb-item active">Facture Vente</li>
                         </ol>
                     </div>
 
@@ -26,7 +26,7 @@
         </div>
 
         <div class="d-flex mb-3 justify-content-end">
-            <a href="{{ route('createFacture')}}" class="btn btn-warning fw-bold text-white">Saisir une facture</a>
+            <a href="{{ route('createFactureVente')}}" class="btn btn-warning fw-bold text-white">Saisir une facture</a>
         </div>
 
         <div class="row">
@@ -39,7 +39,7 @@
                                 <tr>
                                     <th>id</th>
                                     <th>N° Facture</th> 
-                                    <th>Fournisseur</th>   
+                                    <th>Client</th>   
                                     <th>Etat</th>  
                                     <th>Total HT</th>
                                     <th>Total TVA</th>
@@ -58,8 +58,8 @@
                                 @foreach($dataFacture as $facture)
                                         <tr>
                                             <td class="text-warning fw-bold">#{{$facture['id']}}</td>
-                                            <td>{{$facture['numero_Facture']}}</td>
-                                            <td>{{$facture['fournisseur']}}</td>
+                                            <td>{{$facture['numero_FactureVente']}}</td>
+                                            <td>{{$facture['nom_Client']}}</td>
                                             <td>
                                                 <span class="statut-dispo badge bg-{{ $facture['EtatPaiement'] === 'impaye' ? 'danger' : ($facture['EtatPaiement'] === 'Paye' ? 'success' : 'info')}} text-white">
                                                     <i class="{{ $facture['EtatPaiement'] === 'impaye' ? 'ri-close-circle-line' : ($facture['EtatPaiement'] === 'Paye' ? 'ri-checkbox-circle-line' : 'ri-radio-button-line')}} align-middle font-size-14 text-white"></i> 
@@ -78,7 +78,7 @@
                                                 </span>
                                             </td> 
                                             <td>
-                                                <a  href="{{route("showFacture",$facture['id'])}}"
+                                                <a  href="{{route("showFactureVente",$facture['id'])}}"
                                                     class="btn btn-outline-primary btn-sm mb-2"
                                                     data-bs-toggle="tooltip"
                                                     data-bs-placement="top"
@@ -87,9 +87,9 @@
                                                 </a>
                                             </td>                                     
                                             <td>{{$facture['remise']}}</td>
-                                            <td>{{$facture['Numero_bonLivraison']}}</td>
+                                            <td>{{$facture['Numero_bonLivraisonVente']}}</td>
                                             <td>
-                                                {{\Carbon\Carbon::parse($facture['date_Facture'])->isoFormat("LL") }}
+                                                {{\Carbon\Carbon::parse($facture['date_FactureVente'])->isoFormat("LL") }}
                                             </td>
                                             
                                         </tr>

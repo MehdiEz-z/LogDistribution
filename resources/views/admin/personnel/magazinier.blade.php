@@ -25,9 +25,9 @@
             </div>
         </div>
 
-        <div class="d-flex mb-3 justify-content-end">
+        {{-- <div class="d-flex mb-3 justify-content-end">
             <button type="button" class="btn btn-warning fw-bold text-white" data-bs-toggle="modal" data-bs-target=".magazinierModal">Ajouter un magasinier</button>
-        </div>
+        </div> --}}
         
         <form action="" method="">
             @csrf

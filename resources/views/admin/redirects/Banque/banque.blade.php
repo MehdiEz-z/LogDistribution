@@ -43,67 +43,96 @@ Banque | Log Dist Du Nord
                         <div class="modal-body row">
                                 <input type="number" hidden class="form-control" name="id" id="id" value=""/>
 
-                            <div class="mb-3 col-lg-4">
-                                <label class="form-label" for="nomBank">Nom de Banque</label>
+                            <div class="mb-3 col-lg-4" id="namebanklabel">
+                                <label class="form-label" for="nomBank" >Nom de Banque</label>
                                 <input type="text" class="form-control" name="nomBank" id="nomBank" value="{{ old('nomBank')}}"/>
                                 @error('nomBank')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
 
-                            <div class="mb-3 col-lg-4">
-                                <label class="form-label" for="telephone">Téléphone</label>
+                            <div class="mb-3 col-lg-4" id="telelabel">
+                                <label class="form-label" for="telephone" >Téléphone</label>
                                 <input type="text" class="form-control" name="telephone" id="telephone" value="{{ old('telephone')}}"/>
                                 @error('telephone')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="mb-3 col-lg-4">
-                                <label class="form-label" for="adresse">Address</label>
+                            <div class="mb-3 col-lg-4" id="adresslabel">
+                                <label class="form-label" for="adresse" >Address</label>
                                 <input type="text" class="form-control" name="adresse" id="adresse" value="{{ old('adresse')}}"/>
                                 @error('adresse')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
 
-                            <div class="mb-3 col-lg-6">
-                                <label class="form-label" for="numero_compt">Numero de Compte</label>
+                            <div class="mb-3 col-lg-6" id="nmrcomptlabel">
+                                <label class="form-label" for="numero_compt" >Numero de Compte</label>
                                 <input type="text" class="form-control" name="numero_compt" id="numero_compt" value="{{ old('numero_compt')}}"/>
                                 @error('numero_compt')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
 
-                            <div class="mb-3 col-lg-6">
-                                <label class="form-label" for="rib_compt">RIB de Compte</label>
+                            <div class="mb-3 col-lg-6" id="riblabel">
+                                <label class="form-label" for="rib_compt" >RIB</label>
                                 <input type="text" class="form-control" name="rib_compt" id="rib_compt" value="{{ old('rib_compt')}}"/>
                                 @error('rib_compt')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
 
-
-                            <div class="mb-3 col-lg-6">
-                                <label class="form-label" for="Solde">Solde</label>
-                                <input type="number" class="form-control" name="Solde" id="Solde" value="{{ old('Solde')}}"/>
-                                @error('Solde')
+                            <div class="mb-3 col-lg-6" id="commentlabel">
+                                <label class="form-label" for="Commentaire" >Commentaire</label>
+                                <input type="text" class="form-control" name="Commentaire" id="Commentaire" value="{{ old('Commentaire')}}"/>
+                                @error('rib_compt')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
 
-                            <div class="mb-3 col-lg-6">
-                                <label class="form-label" for="Commentaire">Commentaire</label>
-                                <input type="text" class="form-control" name="Commentaire" id="Commentaire" value="{{ old('Commentaire')}}"/>
+
+                            <div class="mb-3 col-lg-6" id="typetransactionlabel">
+                                <label class="form-label" for="typetransaction" >Type transaction </label>
+                                <select class="form-select" name="typetransaction" id="typetransaction">
+                                    <option  > selectionnez un type de transaction  </option>
+                                    <option value="withdraw" > Retrait</option>
+                                    <option value="depots" > Dépôts </option>
+                                   
+                                </select>
+                            </div>
+                            <div class="mb-3 col-lg-6" id="sourcetransactionlabel">
+                              <label class="form-label" for="sourcetransaction">Source Transaction</label>
+                                <input type="text" class="form-control"name="sourcetransaction" id="sourcetransaction"value="Compte Bancaire"/>
                                 @error('Commentaire')
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
+                         
+
+                            <div class="mb-3 col-lg-6" id="soldelabel">
+                                <label class="form-label" for="solde">Montant</label>
+                                <input type="text" class="form-control" name="solde" id="solde" value="{{ old('solde')}}"/>
+                                @error('Commentaire')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3 col-lg-6" id="motiflabel">
+                                <label class="form-label" for="motif">Motif</label>
+                                <input type="text" class="form-control" name="motif" id="motif" value="{{ old('motif')}}"/>
+                                @error('Commentaire')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                       
 
                         </div>
                         <div class="modal-footer">
                             <button type="button"  class="btn btn-light" data-bs-dismiss="modal">Fermer</button>
                             <button onclick="storebank()" class="btn btn-warning fw-bold text-white" id="add-btn">Ajouter</button>
                             <button onclick="updatebank()" class="btn btn-warning fw-bold text-white" id="update-btn">Update</button>
+                            <button onclick="addsoldetobank()" class="btn btn-warning fw-bold text-white" id="add-solde-btn">Ajouter un solde</button>
                         </div>
                     </div>
                 </div>
@@ -125,42 +154,28 @@ Banque | Log Dist Du Nord
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        @if($message = Session::get('success'))
-                        <div class="alert alert-success alert-dismissible fade show my-3" role="alert">
-                            <i class="mdi mdi-check-all me-2"></i>
-                            {{$message}}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <div class="table-responsive">
+                            <table class="table table-centered mb-0 align-middle table-hover table-nowrap text-center">
+                                <thead>
+                                    <tr>
+                                        <th>id</th>
+                                        <th>Banque</th>
+                                        <th>Adresse</th>
+                                        <th>Telephone</th>
+                                        <th>Numero Compt</th>
+                                        <th>RIB Compt</th>
+                                        <th>Solde</th>
+                                        <th>Commentaire</th>
+
+                                    </tr>
+                                </thead>
+
+                                <tbody class="text-center">
+                                    <tr>                                   
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                    @endif
-
-                    @if($message = Session::get('error'))
-                        <div class="alert alert-danger alert-dismissible fade show my-3" role="alert">
-                            <i class="mdi mdi-block-helper me-2"></i>
-                            {{$message}}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    @endif
-                        <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                            <thead>
-                                <tr>
-                                    <th>id</th>
-                                    <th>Banque</th>
-                                    <th>Adresse</th>
-                                    <th>Telephone</th>
-                                    <th>Numero Compt</th>
-                                    <th>RIB Compt</th>
-                                    <th>Solde</th>
-                                    <th>Commentaire</th>
-
-                                </tr>
-                            </thead>
-
-                            <tbody class="text-center">
-                                {{-- @foreach($data as $banque) --}}
-                                <tr>                                   
-                                </tr>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
@@ -186,7 +201,9 @@ Banque | Log Dist Du Nord
                  displaydatabank();
             });
     
-
+// setInterval(() => {
+//     displaydatabank();
+// }, 1000);
              function displaydatabank(){
             $.ajax({
                 url: 'https://iker.wiicode.tech/api/bank',
@@ -210,8 +227,9 @@ Banque | Log Dist Du Nord
                 row.append('<td class="TdCommentaire">' + bank.Commentaire + '</td>');
                 row.append('<td>' +
                     '<a onclick="editbank(' + bank.id + ')" class="btn btn-outline-primary btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
-                    '<i class="fas fa-info-circle"></i></a>' +
-                    '<div><button onclick="deletebank(' + bank.id + ')" class="btn btn-outline-danger btn-sm"> <i class="fas fa-trash-alt"></i></button></div>' +
+                    '<i class="fas fa-info-circle  mx-2"></i></a>' +
+                    '<div><button onclick="addsoldebank(' + bank.id + ')" class="btn btn-outline-success btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
+                    '<span class="icon-with-flag"> <i class="fas fa-exchange-alt mx-1 "></i><i class="fas fa-dollar-sign flag-icon"></i></span></button> </div>' +
                     '</td>');
 
                 tbody.append(row);
@@ -239,6 +257,18 @@ Banque | Log Dist Du Nord
             $("#add-btn").show()
             $("#update-btn").hide()
             $("#myLargeModalLabel").text('Info banque');
+            $("#add-solde-btn").hide()
+            $("#soldelabel").hide()
+            $("#motiflabel").hide()
+            $("#sourcetransactionlabel").hide()
+            $("#typetransactionlabel").hide()
+            $("#namebanklabel").show();
+            $("#telelabel").show();
+            $("#adresslabel").show();
+            $("#nmrcomptlabel").show();
+            $("#riblabel").show();
+            $("#commentlabel").show();
+
        }
 
         
@@ -248,7 +278,6 @@ Banque | Log Dist Du Nord
             const ADRESSE = $("#adresse").val();
             const NUMERO_COMPTE = $("#numero_compt").val();
             const RIB_COMPTE = $("#rib_compt").val();
-            const SOLDE = $("#Solde").val();
             const COMMENTAIRE = $("#Commentaire").val();
 
             $.ajax({
@@ -260,7 +289,6 @@ Banque | Log Dist Du Nord
                     telephone: TELEPHONE,
                     numero_compt: NUMERO_COMPTE,
                     rib_compt: RIB_COMPTE,
-                    solde: SOLDE,
                     Commentaire: COMMENTAIRE
                 },
                     dataType: "json",
@@ -271,9 +299,8 @@ Banque | Log Dist Du Nord
                     displaydatabank();
                     },
                     error: function(response) {
-                        console.log(response);
                         console.log(response.responseJSON.message);
-                        swal(response.responseJSON.message, "3mr Al9lawi ", "warning");
+                        swal(response.responseJSON.message, "", "warning");
                         // $(".magazinierModal").modal('hide')
                         //  displaydatabank();
                     }
@@ -286,6 +313,17 @@ Banque | Log Dist Du Nord
             $(".magazinierModal").modal('show')
             $("#add-btn").hide()
             $("#update-btn").show()
+            $("#add-solde-btn").hide()
+            $("#soldelabel").hide()
+            $("#motiflabel").hide()
+            $("#sourcetransactionlabel").hide()
+            $("#typetransactionlabel").hide()
+            $("#namebanklabel").show();
+            $("#telelabel").show();
+            $("#adresslabel").show();
+            $("#nmrcomptlabel").show();
+            $("#riblabel").show();
+            $("#commentlabel").show();
             $("#myLargeModalLabel").text('Edit banque');
 
             $.ajax({
@@ -300,7 +338,6 @@ Banque | Log Dist Du Nord
                     $('input[name="adresse"]').val(data.adresse);
                     $('input[name="numero_compt"]').val(data.numero_compt);
                     $('input[name="rib_compt"]').val(data.rib_compt);
-                    $('input[name="Solde"]').val(data.Solde);
                     $('input[name="Commentaire"]').val(data.Commentaire);
                 },
                 error: function() {
@@ -315,7 +352,6 @@ Banque | Log Dist Du Nord
             const ADRESSE = $("#adresse").val();
             const NUMERO_COMPTE = $("#numero_compt").val();
             const RIB_COMPTE = $("#rib_compt").val();
-            const SOLDE = $("#Solde").val();
             const COMMENTAIRE = $("#Commentaire").val();
 
             $.ajax({
@@ -328,7 +364,6 @@ Banque | Log Dist Du Nord
                     telephone: TELEPHONE,
                     numero_compt: NUMERO_COMPTE,
                     rib_compt: RIB_COMPTE,
-                    solde: SOLDE,
                     Commentaire: COMMENTAIRE
                 },
                     dataType: "json",
@@ -343,6 +378,77 @@ Banque | Log Dist Du Nord
                     swal(response.message, "", "warning");
                     }
             });
+
+        }
+        function addsoldebank(id) {
+       console.log(id);
+            $(".magazinierModal").modal('show')
+            $("#add-btn").hide()
+            $("#update-btn").hide()
+            $("#add-solde-btn").show()
+            $("#myLargeModalLabel").text('Ajouter un solde au ');
+            $("#namebanklabel").hide();
+            $("#telelabel").hide();
+            $("#adresslabel").hide();
+            $("#nmrcomptlabel").hide();
+            $("#riblabel").hide();
+            $("#commentlabel").hide();
+            $("#soldelabel").show();
+            $("#motiflabel").show();
+            $("#sourcetransactionlabel").show();
+            $("#typetransactionlabel").show();
+            $('input[type="text"]').each(function() {
+              $(this).val('');
+            });
+            $('input[type="number"]').each(function() {
+              $(this).val('');
+            });
+            $.ajax({
+                url: 'https://iker.wiicode.tech/api/bank/' + id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                  
+                    $("#myLargeModalLabel").text('Affecter une operation A  '+ data.nomBank +' ');
+                    $('input[name="sourcetransaction"]').prop("readonly", true);
+                    $("#typetransaction").val($("#typetransaction option:first").val());
+                    $("#sourcetransaction").val('Compte Bancaire')
+
+                },
+                error: function(data) {
+                  
+                }
+            });
+          
+        }
+
+        function addsoldetobank(){
+        var typetransaction = $('#typetransaction').val();
+        // var sourcetransaction = $('#sourcetransaction').val();
+        var solde = $('#solde').val();
+        var motif = $('#motif').val();
+
+        $.ajax({
+            url: "https://iker.wiicode.tech/api/withdraw",
+            type: 'POST',
+            data: {
+                type: typetransaction,
+                mode : 'bank',
+                motif: motif,
+                solde: solde
+            },
+            success: function(response) {
+                // Handle the success response
+                $(".magazinierModal").modal('hide')
+                   swal(response.message, "", "success");
+                   displaydatabank();
+            },
+            error: function(response) {
+                // Handle the error response
+                swal(response.responseJSON.message, "", "warning");
+            }
+        });
+         
         }
 
         function deletebank(id){

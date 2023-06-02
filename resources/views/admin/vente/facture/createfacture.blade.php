@@ -1,7 +1,7 @@
 @extends('admin.layouts.template')
 
 @section('page-title')
-    Facture Achat | Log Dist Du Nord
+    Facture Vente | Log Dist Du Nord
 @endsection
 
 @section('admin')
@@ -12,12 +12,12 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Facture Achat</h4>
+                    <h4 class="mb-sm-0">Facture Vente</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Log Dist Du Nord</a></li>
-                            <li class="breadcrumb-item active">Facture Achat</li>
+                            <li class="breadcrumb-item active">Facture Vente</li>
                         </ol>
                     </div>
 
@@ -30,7 +30,7 @@
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         Créer une facture
-                        <a href="{{ route('achatFacture')}}" class="btn btn-outline-secondary btn-sm" type="submit">
+                        <a href="{{ route('venteFacture')}}" class="btn btn-outline-secondary btn-sm" type="submit">
                             <i class="ri-arrow-go-back-line"></i>
                         </a>
                     </div>
@@ -40,20 +40,20 @@
                             <div class="row">
                                 <div class="mb-3 col-lg-4">
                                     <label class="form-label" for="facturenumero">Numéro du facture</label>
-                                    <input type="text" class="form-control" name="facturenumero" id="facturenumero" value="{{ old('facturenumero')}}"/>
+                                    <input type="text" class="form-control" name="facturenumero" id="facturenumero" value="{{ old('facturenumero')}}" disabled/>
                                 </div>
                                 <div class="mb-3 col-lg-4">
                                     <label class="form-label" for="facturebonlivraison">Bon livraison</label>
                                     <select class="form-select" name="facturebonlivraison" id="facturebonlivraison">
                                         <option>Selectionner un bon livraison</option>
                                         @foreach($dataBl as $bl)
-                                            <option value="{{$bl['id']}}">{{$bl['Numero_bonLivraison']}}</option>
+                                            <option value="{{$bl['id']}}">{{$bl['Numero_bonLivraisonVente']}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="mb-3 col-lg-4">
                                     <label class="form-label" for="facturedate">Date</label>
-                                    <input type="date" class="form-control" name="facturedate" id="facturedate" value="{{ old('facturedate')}}"/>
+                                    <input type="text" class="form-control" name="facturedate" id="facturedate" value="{{ old('facturedate')}}" disabled/>
                                 </div>
                             </div>
                             <table id="facturetable" class="table table-striped table-bordered dt-responsive nowrap mb-4" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -99,26 +99,26 @@
                                         <tbody>
                                             <tr>
                                                 <th width="50" class="fw-normal">Total HT Global</th>
-                                                <td width="50" class="text-end" data-summary-field="totalht">0,00 dhs</td>
+                                                <td width="50" class="text-end" data-summary-field="totalht">0.00 dhs</td>
                                             </tr>
                                             <tr>
                                                 <th width="50" class="fw-normal">Remise</th>
-                                                <td width="50" class="text-end" data-summary-field="remise" class="fw-normal">0,00 dhs</td>
+                                                <td width="50" class="text-end" data-summary-field="remise" class="fw-normal">0.00 dhs</td>
                                             </tr>
                                             <tr>
                                                 <th width="50" class="fw-normal">Total TVA Global</th>
-                                                <td width="50" class="text-end" data-summary-field="totaltva">0,00 dhs</td>
+                                                <td width="50" class="text-end" data-summary-field="totaltva">0.00 dhs</td>
                                             </tr>
                                             <tr>
                                                 <th width="50" class="fw-bold">Total TTC Global</th>
-                                                <td width="50" class="text-end" data-summary-field="totalttc" class="fw-bold">0,00 dhs</td>
+                                                <td width="50" class="text-end" data-summary-field="totalttc" class="fw-bold">0.00 dhs</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
-                        <input type="hidden" class="form-control" name="fournisseurId" id="fournisseurId"/>
+                        <input type="hidden" class="form-control" name="clientId" id="clientId"/>
                         <div class="card-footer text-center">
                             <button onclick="sendFacture()" class="btn btn-warning fw-bold text-white">Ajouter la facture</button>
                         </div>
@@ -150,15 +150,15 @@
     bonLivraisonSelect.addEventListener('change', function() {
         const bonLivraisonId = this.value;
 
-        fetch(backendUrl +`/bonlivraison/${bonLivraisonId}`)
+        fetch(backendUrl +`/bonlivraisonvente/${bonLivraisonId}`)
         .then(response => response.json())
         .then(data => {
             console.log(data.Articles);
             tableBody.innerHTML = '';
 
-            const fournisseurId = data.fournisseur_id;
-            let fournisseurIdInput = document.getElementById("fournisseurId");
-            fournisseurIdInput.value = fournisseurId
+            const clientId = data.client_id;
+            let clientIdInput = document.getElementById("clientId");
+            clientIdInput.value = clientId
 
             data.Articles.forEach(article => {
                 let row = tableBody.insertRow();
@@ -190,7 +190,7 @@
                 quantiteCell.appendChild(quantiteInput);
                 
                 let totalHTCell = row.insertCell();
-                totalHTCell.textContent = '0,00 dhs';
+                totalHTCell.textContent = '0.00 dhs';
                 
                 let deleteCell = row.insertCell();
                 let deleteButton = document.createElement("button");
@@ -217,7 +217,7 @@
                     if(prixUnitaireInput.value > 0 && quantiteInput.value > 0)
                         totalHTCell.textContent = totalHt.toFixed(2) + " dhs";
                     if(prixUnitaireInput.value == 0 || quantiteInput.value== 0)
-                        totalHTCell.textContent = '0,00 dhs';
+                        totalHTCell.textContent = '0.00 dhs';
                     updateGlobalTotals();
                 }
                 calculTotalHt();
@@ -295,7 +295,7 @@ function sendFacture() {
     const dateFacture = dateInput.value;
     const noteFacture = noteTextarea.value;
     const tvaFacture = document.getElementById('facturetva').value;
-    const fournisseurId = document.getElementById('fournisseurId').value;
+    const clientId = document.getElementById('clientId').value;
 
     let articles = [];
     let rows = tableBody.rows;
@@ -323,26 +323,25 @@ function sendFacture() {
     else confirmation = 0;
 
     let facture = {
-        numero_Facture: numeroFacture,
+        numero_FactureVente: numeroFacture,
         Total_HT: totalHtGlobal,
         Total_TVA: totalTvaGlobal,
         Confirme: confirmation,
         remise: totalRemiseGlobal,
-        date_Facture: dateFacture,
+        date_FactureVente: dateFacture,
         Total_TTC: totalTtcGlobal,
         Total_Rester: totalTtcGlobal,
-        fournisseur_id: fournisseurId,
+        client_id: clientId,
         Commentaire: noteFacture,
         TVA : tvaFacture,
-        bonLivraison_id: bonLivraisonId,
-        Code_journal: 'Achat',
+        bonLivraisonVente_id: bonLivraisonId,
         Articles: articles,
     };
    
     console.log(facture);
 
     $.ajax({
-        url: backendUrl +'/facture',
+        url: backendUrl +'/facturevente',
         type: 'POST',
         data: facture,
         success: function(response) {
@@ -355,7 +354,7 @@ function sendFacture() {
                 },
                 closeOnClickOutside: false
             }).then(function() {
-                window.location.href = "{{ env('APP_URL') }}/facture-achat/detail/" + response.id;
+                window.location.href = "{{ env('APP_URL') }}/facture-vente/detail/" + response.id;
             });
         },
         error: function(response) {
@@ -370,6 +369,26 @@ function sendFacture() {
         }        
     });
 }
+
+$(document).ready(function() {
+
+    $.ajax({
+        url: backendUrl +'/getnf',
+        type: 'GET',
+        success: function(response) {
+            console.log(response);
+            document.getElementById("facturenumero").value = response.num_fv;
+            let today = new Date();
+            let dd = String(today.getDate()).padStart(2, '0');
+            let mm = String(today.getMonth() + 1).padStart(2, '0');
+            let yyyy = today.getFullYear();
+
+            today = yyyy + '-' + mm + '-' + dd;
+            document.getElementById("facturedate").value = today;
+        },
+    });
+
+});
 
 </script>
 

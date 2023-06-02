@@ -60,9 +60,6 @@
                                 <label class="form-label" for="bcarticle">Articles</label>
                                 <select class="form-select" name="bcarticle" id="bcarticle">
                                     <option>Selectionner un article</option>
-                                    @foreach($dataArticle as $article)
-                                        <option value="{{$article['id']}}">{{$article['article_libelle']}}</option>
-                                    @endforeach
                                 </select>
                             </div>
                             <table id="bctable" class="table table-striped table-bordered dt-responsive nowrap mb-4" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -171,6 +168,7 @@
     const referenceInput = document.getElementById('bcnumero');
     const fournisseurSelect = document.getElementById('bcfournisseur');
     const dateSelect = document.getElementById('bcdate');
+    const backendUrl = "{{ app('backendUrl') }}";
 
     function disableArticleSelect() {
         articleSelect.disabled = true;
@@ -184,7 +182,7 @@
         if (referenceInput.value == '' || fournisseurSelect.value == '' || dateSelect.value == '') {
             disableArticleSelect();
         } else {
-            enableArticleSelect(); 
+            enableArticleSelect();
         }
     }
 
@@ -209,7 +207,7 @@
             return;
         }
 
-        fetch('https://iker.wiicode.tech/api/articles/' + articleId)
+        fetch(backendUrl +'/articles/' + articleId)
         .then(response => response.json())
         .then(data => {
 
@@ -377,7 +375,7 @@ function sendCommande() {
     console.log(commande);
 
     $.ajax({
-        url: 'https://iker.wiicode.tech/api/boncommande',
+        url: backendUrl +'/boncommande',
         type: 'POST',
         data: commande,
         success: function(response) {
@@ -390,7 +388,7 @@ function sendCommande() {
                 },
                 closeOnClickOutside: false
             }).then(function() {
-                window.location.href = "http://127.0.0.1:8000/bon-commande/detail/" + response.id;
+                window.location.href = "{{ env('APP_URL') }}/bon-commande-achat/detail/" + response.id;
             });
         },
         error: function(response) {
@@ -412,11 +410,12 @@ $(document).ready(function() {
         const fournisseurId = $(this).val();
         
         $.ajax({
-            url: 'https://iker.wiicode.tech/api/articlefr/' + fournisseurId,
+            url: backendUrl +'/articlefr/' + fournisseurId,
             type: 'GET',
             dataType: 'json',
             success: function(response) {
                 $('#bcarticle').empty();
+                $('#bcarticle').append('<option value="">Selectionner un article</option>');
                 $.each(response.articles, function(index, article) {
                     $('#bcarticle').append('<option value="' + article.id + '">' + article.article_libelle + '</option>');
                 });
@@ -428,7 +427,7 @@ $(document).ready(function() {
     });
 
     $.ajax({
-        url: 'https://iker.wiicode.tech/api/getnbc',
+        url: backendUrl +'/getnbc',
         type: 'GET',
         success: function(response) {
             console.log(response);

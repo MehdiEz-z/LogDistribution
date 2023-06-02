@@ -128,38 +128,24 @@ Stock | Log Dist Du Nord
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        @if($message = Session::get('success'))
-                        <div class="alert alert-success alert-dismissible fade show my-3" role="alert">
-                            <i class="mdi mdi-check-all me-2"></i>
-                            {{$message}}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    @endif
+                        <div class="table-responsive">
+                            <table class="table table-centered mb-0 align-middle table-hover table-nowrap text-center">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>id</th>
+                                        <th>Articles</th>
+                                        <th>Warehouses</th>
+                                        <th>Actual Stock</th>
+                                        <th>Operations</th>
+                                    </tr>
+                                </thead>
 
-                    @if($message = Session::get('error'))
-                        <div class="alert alert-danger alert-dismissible fade show my-3" role="alert">
-                            <i class="mdi mdi-block-helper me-2"></i>
-                            {{$message}}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                <tbody class="text-center">
+                                    <tr>                                   
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                    @endif
-                        <table id="datatable-buttons" class="table table-striped table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
-                            <thead>
-                                <tr class="text-center">
-                                    <th>id</th>
-                                    <th>Articles</th>
-                                    <th>Warehouses</th>
-                                    <th>Actual Stock</th>
-                                    <th>Operations</th>
-                                </tr>
-                            </thead>
-
-                            <tbody class="text-center">
-                                {{-- @foreach($data as $banque) --}}
-                                <tr>                                   
-                                </tr>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
@@ -192,18 +178,16 @@ function displaydatastock() {
         type: 'GET',
         dataType: 'json',
         success: function(data) {
-            // console.log(data);
+            console.log(data);
             var tbody = $('.table tbody');
-            tbody.empty(); // Clear the existing table body
-            var stockdata = data.data;
-            // console.log(stockdata[0].id);
-            // Loop over the data array
-            for (var i = 0; i < stockdata.length; i++) {
-                var stock = stockdata[i];
+            tbody.empty();
+          
+            for (var i = 0; i < data.length; i++) {
+                var stock = data[i];
                 var row = $('<tr></tr>');
                 row.append('<td>' + stock.id + '</td>');
-                row.append('<td>' + stock.article + '</td>');
-                row.append('<td>' + stock.warehouse + '</td>');
+                row.append('<td>' + stock.article_libelle + '</td>');
+                row.append('<td>' + stock.nom_Warehouse + '</td>');
                 row.append('<td>' + stock.actual_stock + '</td>');
                 row.append('<td class="d-flex justify-content-center ">' +
                     '<div class="m-2"><button onclick="addstock(' + stock.id + ')" class="btn btn-outline-success btn-sm mb-2" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Détails">' +
@@ -213,10 +197,7 @@ function displaydatastock() {
                     '<i class="ri-edit-line"></i></button>' +
                     '<div><button onclick="deletestock(' + stock.id + ')" class="btn btn-outline-danger btn-sm"><i class="fas fa-trash-alt"></i></button></div></div>' +
                     '</td>');
-               
-
-                    // '<div><button onclick="deletestock(' + stock.id + ')" class="btn btn-outline-danger btn-sm"> <i class="fas fa-trash-alt"></i></button></div>' +
-                    // '</td>');
+ 
                 tbody.append(row);
             }
         },
@@ -226,7 +207,6 @@ function displaydatastock() {
         }
     });
 }
-    //   for calcule add athor stock 
 
     $(document).ready(function() {
     // Listen for input/change event on the quantity input field

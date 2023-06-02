@@ -1,7 +1,7 @@
 @extends('admin.layouts.template')
 
 @section('page-title')
-    Facture Achat | Log Dist Du Nord
+    Facture Vente | Log Dist Du Nord
 @endsection
 
 @section('admin')
@@ -12,12 +12,12 @@
         <div class="row">
             <div class="col-12">
                 <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                    <h4 class="mb-sm-0">Facture Achat</h4>
+                    <h4 class="mb-sm-0">Facture Vente</h4>
 
                     <div class="page-title-right">
                         <ol class="breadcrumb m-0">
                             <li class="breadcrumb-item"><a href="javascript: void(0);">Log Dist Du Nord</a></li>
-                            <li class="breadcrumb-item active">Facture Achat</li>
+                            <li class="breadcrumb-item active">Facture Vente</li>
                         </ol>
                     </div>
 
@@ -42,24 +42,24 @@
                                 @endforeach
                             </div>
                             <div>
-                                <h4 class="fw-semibold mb-2">FACTURE {{$dataFacturee['numero_Facture']}}</h4>
+                                <h4 class="fw-semibold mb-2">FACTURE {{$dataFacturee['numero_FactureVente']}}</h4>
                                 <div class="mb-3 pt-1 d-flex">
                                     <span class="pe-2">Date: </span>
                                     <span class="fw-semibold pe-3">
-                                        {{\Carbon\Carbon::parse($dataFacturee['date_Facture'])->isoFormat("LL") }}
+                                        {{\Carbon\Carbon::parse($dataFacturee['date_FactureVente'])->isoFormat("LL") }}
                                     </span>
                                     <span class="statut-dispo d-flex align-items-center badge text-white"></span>
                                 </div>
                                 <div class="">
                                     @php
-                                        $fournisseurs = Http::get(app('backendUrl').'/fournisseurs/'.$dataFacturee['fournisseur_id']);
-                                        $dataFournisseur = $fournisseurs->json()['Fournisseur Requested'];
+                                        $client = Http::get(app('backendUrl').'/client/'.$dataFacturee['client_id']);
+                                        $dataClient = $client->json()['client'];
                                     @endphp
-                                    <h6 class="mb-3">Envoyé par:</h6>
-                                    <p class="mb-2">{{ $dataFournisseur['fournisseur'] }}</p>
-                                    <p class="mb-2">{{ $dataFournisseur['Adresse'] }}</p>
-                                    <p class="mb-2">{{ $dataFournisseur['Telephone'] }}</p>
-                                    <p class="mb-0">{{ $dataFournisseur['email'] }}</p>
+                                    <h6 class="mb-3">Envoyé à:</h6>
+                                    <p class="mb-2">{{ $dataClient['nom_Client'] }}</p>
+                                    <p class="mb-2">{{ $dataClient['adresse_Client'] }}</p>
+                                    <p class="mb-2">{{ $dataClient['telephone_Client'] }}</p>
+                                    <p class="mb-0">{{ $dataClient['email_Client'] }}</p>
                                 </div>
                             </div>
                         </div>
@@ -69,11 +69,11 @@
                             <div class="mb-2 col-lg-6">
                                 <div class="mb-2">
                                     <span class="fw-bold">Bon Livraison : </span>
-                                    <span >{{$dataFacturee['Numero_bonLivraison']}}</span>
+                                    <span >{{$dataFacturee['Numero_bonLivraisonVente']}}</span>
                                 </div>
                                 <div class="mb-2">
                                     <span class="fw-bold">Bon Commande : </span>
-                                    <span >{{$dataFacturee['Numero_bonCommande']}}</span>
+                                    <span >{{$dataFacturee['Numero_bonCommandeVente']}}</span>
                                 </div>
                                 <div class="mb-2">
                                     <span class="fw-bold">Date Commande : </span>
@@ -153,7 +153,7 @@
                 <div class="card mb-3">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         Actions
-                        <a href="{{ route('achatFacture') }}" class="btn btn-outline-secondary btn-sm" type="submit">
+                        <a href="{{ route('venteFacture') }}" class="btn btn-outline-secondary btn-sm" type="submit">
                             <i class="ri-arrow-go-back-line"></i>
                         </a>
                     </div>
@@ -167,7 +167,7 @@
                         <div id="accordionPaiement">
                             <button class="btn btn-light text-secondary fw-bold col-12 mb-2" id="paiementButton">Ajouter Paiement</button>
                         </div>
-                        <a href="{{ route('showLivraison', $dataFacturee["bonLivraison_id"] )}}" id="retourBonLivraison" class="btn btn-warning fw-bold text-white col-12">Bon Livraison</a>
+                        <a href="{{ route('showLivraisonVente', $dataFacturee["bonLivraisonVente_id"] )}}" id="retourBonLivraison" class="btn btn-warning fw-bold text-white col-12">Bon Livraison</a>
 
                         {{-- Modal  --}}
                         <div class="modal fade" id="paiementModal" tabindex="-1" aria-labelledby="paiementModalLabel" aria-hidden="true">
@@ -368,7 +368,7 @@ $(document).ready(function() {
     $('#confirmationButton').on('click', function() {
         
         $.ajax({
-            url: backendUrl +'/facture/confirme/' + factureId,
+            url: backendUrl +'/facturevente/confirme/' + factureId,
             method: 'PUT',
             success: function(response) {
                 swal({
@@ -400,7 +400,7 @@ $(document).ready(function() {
 
     function afficherTransactions() {       
         $.ajax({
-            url: backendUrl +'/facture/transactions/' + factureId +'/achat' ,
+            url: backendUrl +'/facture/transactions/' + factureId +'/vente' ,
             type: 'GET',
             success: function(response) {
                 const cardTr = $('.cardTr');
@@ -445,7 +445,7 @@ $(document).ready(function() {
                     }
 
                     cardTitle.append(transactionText);
-                    const cardText = $('<span></span>').addClass('card-text mb-0 text-danger fw-bold').text('- MAD ' + transactionMontant.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+                    const cardText = $('<span></span>').addClass('card-text mb-0 text-success fw-bold').text('+ MAD ' + transactionMontant.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
 
                     cardTitleCol.append(cardTitle);
                     cardTextCol.append(cardText);
@@ -614,7 +614,7 @@ $(document).ready(function() {
 
     function afficherMontantRester() {
         $.ajax({
-            url: backendUrl +'/factureachat/paymentrest/' + factureId,
+            url: backendUrl +'/facturevente/paymentrest/' + factureId,
             type: 'GET',
             success: function(response) {
                 console.log(response)
@@ -712,8 +712,8 @@ $(document).ready(function() {
                 montant: montantTransaction,
                 delais_cheque: dateCheque,
                 imgCheque: imgCheque,
-                factureAchat_id: factureId,
-                journal_id: 2,
+                factureVente_id: factureId,
+                journal_id: 1,
                 bank_id: 1,
                 etat_cheque: 'portfeuille'
             };
@@ -725,8 +725,8 @@ $(document).ready(function() {
                 modePaiement: modePaiement,
                 num_virement: virementNr,
                 montant: montantTransaction,
-                factureAchat_id: factureId,
-                journal_id: 2,
+                factureVente_id: factureId,
+                journal_id: 1,
                 bank_id: 1
             };
         } 
@@ -736,8 +736,8 @@ $(document).ready(function() {
                 date_transaction: dateTransaction,
                 modePaiement: modePaiement,
                 montant: montantTransaction,
-                factureAchat_id: factureId,
-                journal_id: 2,
+                factureVente_id: factureId,
+                journal_id: 1,
             };
         }
         console.log(transactionData)
@@ -791,11 +791,11 @@ $(document).ready(function() {
     });
 
     $('#imprimerAcButton').on('click', function() {
-        let url = backendUrl +'/printf/' + factureId + '/false';    
+        let url = backendUrl +'/printfv/' + factureId + '/false';    
         window.open(url, '_blank');
     });
     $('#telechargerAcButton').on('click', function() {
-        let url = backendUrl +'/printf/' + factureId + '/true';    
+        let url = backendUrl +'/printfv/' + factureId + '/true';    
         window.location.href = url;
     });
 });

@@ -30,7 +30,7 @@
                 <div class="card">
                     <div class="card-header d-flex align-items-center justify-content-between">
                         Créer un bon de livraison
-                        <a href="{{ route('listeLivraison') }}" class="btn btn-outline-secondary btn-sm" type="submit">
+                        <a href="{{ route('listeLivraisonVente') }}" class="btn btn-outline-secondary btn-sm" type="submit">
                             <i class="ri-arrow-go-back-line"></i>
                         </a>
                     </div>
@@ -40,20 +40,20 @@
                             <div class="row">
                                 <div class="mb-3 col-lg-4">
                                     <label class="form-label" for="blnumero">Numéro du bon de livraison</label>
-                                    <input type="text" class="form-control" name="blnumero" id="blnumero" value="{{ old('blnumero')}}"/>
+                                    <input type="text" class="form-control" name="blnumero" id="blnumero" value="{{ old('blnumero')}}" disabled/>
                                 </div>
                                 <div class="mb-3 col-lg-4">
                                     <label class="form-label" for="blboncommande">Bon Commande</label>
                                     <select class="form-select" name="blboncommande" id="blboncommande">
                                         <option>Selectionner un bon commande</option>
                                         @foreach($dataBc as $bc)
-                                            <option value="{{$bc['id']}}">{{$bc['Numero_bonCommande']}}</option>
+                                            <option value="{{$bc['id']}}">{{$bc['Numero_bonCommandeVente']}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div class="mb-3 col-lg-4">
                                     <label class="form-label" for="bldate">Date</label>
-                                    <input type="date" class="form-control" name="bldate" id="bldate" value="{{ old('bldate')}}"/>
+                                    <input type="text" class="form-control" name="bldate" id="bldate" value="{{ old('bldate')}}" disabled/>
                                 </div>
                             </div>
                             <table id="bltable" class="table table-striped table-bordered dt-responsive nowrap mb-4" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
@@ -103,26 +103,26 @@
                                         <tbody>
                                             <tr>
                                                 <th width="50" class="fw-normal">Total HT Global</th>
-                                                <td width="50" class="text-end" data-summary-field="totalht">0,00 dhs</td>
+                                                <td width="50" class="text-end" data-summary-field="totalht">0.00 dhs</td>
                                             </tr>
                                             <tr>
                                                 <th width="50" class="fw-normal">Remise</th>
-                                                <td width="50" class="text-end" data-summary-field="remise" class="fw-normal">0,00 dhs</td>
+                                                <td width="50" class="text-end" data-summary-field="remise" class="fw-normal">0.00 dhs</td>
                                             </tr>
                                             <tr>
                                                 <th width="50" class="fw-normal">Total TVA Global</th>
-                                                <td width="50" class="text-end" data-summary-field="totaltva">0,00 dhs</td>
+                                                <td width="50" class="text-end" data-summary-field="totaltva">0.00 dhs</td>
                                             </tr>
                                             <tr>
                                                 <th width="50" class="fw-bold">Total TTC Global</th>
-                                                <td width="50" class="text-end" data-summary-field="totalttc" class="fw-bold">0,00 dhs</td>
+                                                <td width="50" class="text-end" data-summary-field="totalttc" class="fw-bold">0.00 dhs</td>
                                             </tr>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
-                        <input type="hidden" class="form-control" name="fournisseurId" id="fournisseurId"/>
+                        <input type="hidden" class="form-control" name="clientId" id="clientId"/>
                         <div class="card-footer text-center">
                             <button onclick="sendLivraison()" class="btn btn-warning fw-bold text-white">Ajouter le bon de livraison</button>
                         </div>
@@ -155,17 +155,17 @@ const backendUrl = "{{ app('backendUrl') }}";
 warehouseSelect.disabled = true;
 
 bonCommandeSelect.addEventListener('change', function() {
-const bonCommandeId = this.value;
+    const bonCommandeId = this.value;
 
-    fetch(backendUrl + `/boncommande/${bonCommandeId}`)
+    fetch(backendUrl +`/boncommandevente/${bonCommandeId}`)
     .then(response => response.json())
     .then(data => {
         console.log(data.Articles);
         tableBody.innerHTML = '';
 
-        const fournisseurId = data.fournisseur_id;
-        let fournisseurIdInput = document.getElementById('fournisseurId');
-        fournisseurIdInput.value = fournisseurId;
+        const clientId = data.client_id;
+        let clientIdInput = document.getElementById('clientId');
+        clientIdInput.value = clientId;
 
         data.Articles.forEach(article => {
             let row = tableBody.insertRow();
@@ -197,7 +197,7 @@ const bonCommandeId = this.value;
             quantiteCell.appendChild(quantiteInput);
 
             let totalHTCell = row.insertCell();
-            totalHTCell.textContent = '0,00 dhs';
+            totalHTCell.textContent = '0.00 dhs';
 
             let deleteCell = row.insertCell();
             let deleteButton = document.createElement('button');
@@ -224,14 +224,14 @@ const bonCommandeId = this.value;
                 if (prixUnitaireInput.value > 0 && quantiteInput.value > 0)
                     totalHTCell.textContent = totalHt.toFixed(2) + ' dhs';
                 if (prixUnitaireInput.value == 0 || quantiteInput.value == 0)
-                    totalHTCell.textContent = '0,00 dhs';
+                    totalHTCell.textContent = '0.00 dhs';
                 updateGlobalTotals();
             }
 
             calculTotalHt();
         });
 
-        fetch(backendUrl + '/warehouse')
+        fetch(backendUrl +'/warehouse')
         .then(response => response.json())
         .then(warehouses => {
             warehouseSelect.innerHTML = '';
@@ -317,7 +317,7 @@ function sendLivraison() {
     const dateBonLivraison = dateInput.value;
     const noteBonLivraison = noteTextarea.value;
     const tvaBonLivraison = document.getElementById('bltva').value;
-    const fournisseurId = document.getElementById('fournisseurId').value;
+    const clientId = document.getElementById('clientId').value;
     const warehouseId = document.getElementById('warehouseSelect').value;
 
     let articles = [];
@@ -345,17 +345,17 @@ function sendLivraison() {
     else confirmation = 0;
 
     let livraison = {
-        Numero_bonLivraison: numeroBonLivraison,
+        Numero_bonLivraisonVente: numeroBonLivraison,
         Total_HT: totalHtGlobal,
         Total_TVA: totalTvaGlobal,
         Confirme: confirmation,
         remise: totalRemiseGlobal,
-        date_Blivraison: dateBonLivraison,
+        date_BlivraisonVente: dateBonLivraison,
         Total_TTC: totalTtcGlobal,
-        fournisseur_id: fournisseurId,
+        client_id: clientId,
         Commentaire: noteBonLivraison,
         TVA : tvaBonLivraison,
-        bonCommande_id: bonCommandeId,
+        bonCommandeVente_id: bonCommandeId,
         warehouse_id : warehouseId,
         Articles: articles,
     };
@@ -363,7 +363,7 @@ function sendLivraison() {
     console.log(livraison);
 
     $.ajax({
-        url: backendUrl + '/bonlivraison',
+        url: backendUrl +'/bonlivraisonvente',
         type: 'POST',
         data: livraison,
         success: function(response) {
@@ -376,21 +376,59 @@ function sendLivraison() {
                 },
                 closeOnClickOutside: false
             }).then(function() {
-                window.location.href = "{{ env('APP_URL') }}/bon-livraison-achat/detail/" + response.id;
+                window.location.href = "{{ env('APP_URL') }}/bon-livraison-vente/detail/" + response.id;
             });
         },
         error: function(response) {
+
+            let errorMessage 
+            if (response.responseJSON.message.hasOwnProperty('warehouse_id')) {
+                errorMessage = response.responseJSON.message.warehouse_id;
+            } else {
+                errorMessage = response.responseJSON.message;
+            }
+
+            let desiredQuantity = response.responseJSON.Quantity;
+            let availableQuantity = response.responseJSON.actual_stock;
+            
+            let errorText = errorMessage + "\n\n";
+        
+            if (desiredQuantity) {
+                errorText += "La Quantité Voulue: " + desiredQuantity + "\n" +
+                            "La Quantité disponible: " + availableQuantity;
+            }
+
             swal({
-                title: response.responseJSON.message,
-                icon: "warning",
+                title: "Erreur",
+                text: errorText,
+                icon: "error",
 
                 button: "OK",
-                dangerMode: true,
                 closeOnClickOutside: false
             });
+            console.log(response)
         }        
     });
 }
+
+$(document).ready(function() {
+
+    $.ajax({
+        url: backendUrl +'/getnblv',
+        type: 'GET',
+        success: function(response) {
+            document.getElementById("blnumero").value = response.num_blv;
+            let today = new Date();
+            let dd = String(today.getDate()).padStart(2, '0');
+            let mm = String(today.getMonth() + 1).padStart(2, '0');
+            let yyyy = today.getFullYear();
+
+            today = yyyy + '-' + mm + '-' + dd;
+            document.getElementById("bldate").value = today;
+        },
+    });
+
+});
 
 </script>
 
