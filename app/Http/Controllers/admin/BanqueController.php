@@ -11,6 +11,8 @@ class BanqueController extends Controller
        
 
 
-        return view('admin.redirects.Banque.banque');
+        $responseJournals = Http::get('https://iker.wiicode.tech/api/journal');
+        $allJournals = $responseJournals->json();
+           return view('admin.redirects.Banque.banque' , compact('allJournals'));
     }
 }
