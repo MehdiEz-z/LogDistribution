@@ -30,9 +30,15 @@
   }
 
     .custom-card .card__header {
-      margin-bottom: 1rem;
+      /* margin-bottom: 1rem; */
       font-family: 'Playfair Display', serif;
     }
+
+    @media (max-width: 576px) {
+  .card__header {
+    margin-top: 1rem;
+  }
+}
 
     .custom-card .card__body {
       font-family: 'Roboto', sans-serif;
@@ -139,7 +145,7 @@
     <div class="row justify-content-center">
       <!-- Caisse Card -->
       <div class="col-xl-6 col-md-12 card-container">
-        <div class="custom-card" data-label="Transactions ">
+        <div class="custom-card " data-label="Transactions ">
           <div class="card__container">
             <h1 class="card__header"> caisse Transactions</h1>
             <div class="card__body" id="transactionsContent"></div>
@@ -216,7 +222,7 @@
     function createOperationElement(operation) {
   var operationElement = $("<div></div>").addClass("operation");
   var leftSectionElement = $("<div></div>").addClass("left-section");
-  var rightSectionElement = $("<div></div>").addClass("right-section");
+  var rightSectionElement = $("<div></div>").addClass("right-section w-50");
   
   var titleElement = $("<h2></h2>").addClass("card-title").text(operation.title);
 
@@ -251,7 +257,11 @@
 
 
 
-var soldeIconElement = $("<i></i>").addClass("fas");
+var soldeIconElement = $("<i></i>").addClass("fas ");
+soldeIconElement.css({
+    "font-size": "1.4rem",
+    "margin-right": "0.5rem"
+  });
 var rightInnerSectionElement = $("<div></div>").addClass("right-inner-section");
 
 var dateIconElement = $("<i></i>").addClass("far fa-calendar-alt");
@@ -265,13 +275,16 @@ dateElement.prepend(dateIconElement); // Add the calendar icon before the date f
 var motifElement = $("<p></p>").addClass("operation-motif").text("Motif: " + operation.motif);
 motifElement.css({
   "font-size": "1rem",
+  "text-align":"initial",
   "font-family": "Arial, sans-serif",
   "font-style": "italic",
   "font-weight": "bold",
   "color": "black",
-  "width": "100%", // Set maximum width to 100%
-  "overflow-wrap": "anywhere" // Enable text wrapping
+  "overflow-wrap": "anywhere",
 });
+
+// Add responsive classes for different screen sizes
+motifElement.addClass("text-sm-start text-md-center text-lg-end");
 
   operationElement.append(leftSectionElement, rightSectionElement);
   leftSectionElement.append(titleElement, soldeIconElement, cardText, typeElement);
@@ -281,6 +294,7 @@ motifElement.css({
   if ((operation.type === "depots" || operation.type === "transfert" ) ) {
     leftSectionElement.addClass("deposit");
     soldeIconElement.addClass("fa-arrow-up deposit");
+
     cardText.addClass("text-success");
   } else {
     leftSectionElement.addClass("withdrawal");
@@ -315,7 +329,7 @@ function loadTransactions() {
 }
 
 function createTransactionElement(transaction) {
-  var transactionCard = $("<div></div>").addClass("transaction-card operation");
+  var transactionCard = $("<div></div>").addClass("operation");
   var cardBody = $("<div></div>").addClass("card-body p-0"); // Remove padding
 
   var flexContainer = $("<div></div>").addClass("operation").css("display", "flex");
@@ -337,11 +351,17 @@ function createTransactionElement(transaction) {
 
   var amountElement = $("<p></p>").addClass("card-text mb-0 fw-bold");
   amountElement.text((transaction.factureAchat_id === null) ? "+ MAD " + transaction.montant : "- MAD " + transaction.montant);
-  amountElement.css({
-    "font-size": "1.4rem",
-    "font-family": "Arial, sans-serif",
-    "color": (transaction.factureAchat_id === null) ? "#3AC47D" : "#FF4D4D"
-  });
+
+amountElement.css({
+  "font-size": "1.4rem",
+  "font-family": "Arial, sans-serif"
+});
+
+if (transaction.factureAchat_id === null) {
+  amountElement.addClass("text-success");
+} else {
+  amountElement.addClass("text-danger");
+}
 
   var amountIconElement = $("<i></i>").addClass("fas"); // Icon for vente or achat
   amountIconElement.css({
@@ -350,9 +370,9 @@ function createTransactionElement(transaction) {
   });
 
   if (transaction.factureAchat_id === null) {
-    amountIconElement.addClass("fa-arrow-up").css("color", "#3AC47D");
+    amountIconElement.addClass("fa-arrow-up text-success");
   } else {
-    amountIconElement.addClass("fa-arrow-down").css("color", "#FF4D4D");
+    amountIconElement.addClass("fa-arrow-down text-danger");
   }
 
   var modePaiementElement = $("<p></p>").addClass("operation-type").text("Type: " + transaction.modePaiement);
