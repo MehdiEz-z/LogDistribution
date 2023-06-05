@@ -3,7 +3,7 @@
 <head>
   <title>Caisse Card</title>
   <!-- Include necessary CSS styles -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
+  {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css"> --}}
   <style>
    .custom-card {
       width: 100%;
@@ -30,9 +30,15 @@
   }
 
     .custom-card .card__header {
-      margin-bottom: 1rem;
+      /* margin-bottom: 1rem; */
       font-family: 'Playfair Display', serif;
     }
+
+    @media (max-width: 576px) {
+  .card__header {
+    margin-top: 1rem;
+  }
+}
 
     .custom-card .card__body {
       font-family: 'Roboto', sans-serif;
@@ -139,7 +145,7 @@
     <div class="row justify-content-center">
       <!-- Caisse Card -->
       <div class="col-xl-6 col-md-12 card-container">
-        <div class="custom-card" data-label="Transactions ">
+        <div class="custom-card " data-label="Transactions ">
           <div class="card__container">
             <h1 class="card__header"> caisse Transactions</h1>
             <div class="card__body" id="transactionsContent"></div>
@@ -160,7 +166,7 @@
 
   <!-- Include necessary JS scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
+  {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script> --}}
 
   <script>
     $(document).ready(function() {
@@ -216,17 +222,30 @@
     function createOperationElement(operation) {
   var operationElement = $("<div></div>").addClass("operation");
   var leftSectionElement = $("<div></div>").addClass("left-section");
-  var rightSectionElement = $("<div></div>").addClass("right-section");
+  var rightSectionElement = $("<div></div>").addClass("right-section w-50");
   
   var titleElement = $("<h2></h2>").addClass("card-title").text(operation.title);
 
   var transactionMontant = parseFloat(operation.solde);
   var cardText = $('<span></span>').addClass('card-text mb-0 fw-bold');
-  cardText.text((operation.type === "withdraw") ? "- MAD " + transactionMontant.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "+ MAD " + transactionMontant.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-  cardText.css({
+  cardText.text(
+  (operation.type === "withdraw")
+    ? "- MAD " + transactionMontant.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    : (operation.type === "transfert" && operation.mode === "caisse")
+    ? "- MAD " + transactionMontant.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    : (operation.type === "transfert" && operation.mode === "bank")
+    ? "+ MAD " + transactionMontant.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    : "+ MAD " + transactionMontant.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+);
+cardText.css({
     "font-size": "1.4rem",
     "font-family": "Arial, sans-serif",
-    "color": (operation.type === "withdraw") ? "#FF4D4D" : "#3AC47D"
+    "color" : (operation.type === "withdraw") ? "#FF4D4D" 
+    : (operation.type === "transfert" && operation.mode === "caisse")
+    ? "#FF4D4D" 
+    : (operation.type === "transfert" && operation.mode === "bank")
+    ? "#3AC47D" 
+    :"#3AC47D" 
   });
 
   var typeElement = $("<p></p>").addClass("operation-type");
@@ -240,10 +259,15 @@
 
   var typeBadgeElement = $("<span></span>").addClass("me-2 badge");
   
-  if (operation.type === "withdraw") {
-    typeBadgeElement.css("background-color", "#FF4D4D").text(operation.type);
-  } else {
-    typeBadgeElement.css("background-color", "#3AC47D").text(operation.type);
+  if (operation.type === "withdraw" ) {
+    typeBadgeElement.addClass("bg-danger").text(operation.type);
+  }
+    else if (operation.type === "transfert" && operation.mode === "caisse") {
+      typeBadgeElement.addClass("bg-danger").text(operation.type);
+  }else if (operation.type === "transfert" && operation.mode === "bank") 
+  typeBadgeElement.addClass("bg-success").text(operation.type);
+  else {
+    typeBadgeElement.addClass("bg-success").text(operation.type);
   }
   
   typeElement.append(typeBadgeElement);
@@ -251,7 +275,11 @@
 
 
 
-var soldeIconElement = $("<i></i>").addClass("fas");
+var soldeIconElement = $("<i></i>").addClass("fas ");
+soldeIconElement.css({
+    "font-size": "1.4rem",
+    "margin-right": "0.5rem"
+  });
 var rightInnerSectionElement = $("<div></div>").addClass("right-inner-section");
 
 var dateIconElement = $("<i></i>").addClass("far fa-calendar-alt");
@@ -265,28 +293,45 @@ dateElement.prepend(dateIconElement); // Add the calendar icon before the date f
 var motifElement = $("<p></p>").addClass("operation-motif").text("Motif: " + operation.motif);
 motifElement.css({
   "font-size": "1rem",
+  "text-align":"initial",
   "font-family": "Arial, sans-serif",
   "font-style": "italic",
   "font-weight": "bold",
   "color": "black",
-  "width": "100%", // Set maximum width to 100%
-  "overflow-wrap": "anywhere" // Enable text wrapping
+  "overflow-wrap": "anywhere",
 });
+
+// Add responsive classes for different screen sizes
+motifElement.addClass("text-sm-start text-md-center text-lg-end");
 
   operationElement.append(leftSectionElement, rightSectionElement);
   leftSectionElement.append(titleElement, soldeIconElement, cardText, typeElement);
   rightSectionElement.append(rightInnerSectionElement);
   rightInnerSectionElement.append(dateElement, motifElement);
 
-  if ((operation.type === "depots" || operation.type === "transfert" ) ) {
-    leftSectionElement.addClass("deposit");
-    soldeIconElement.addClass("fa-arrow-up deposit");
-    cardText.addClass("text-success");
-  } else {
-    leftSectionElement.addClass("withdrawal");
-    soldeIconElement.addClass("fa-arrow-down withdrawal");
-    cardText.addClass("text-danger");
+  if(operation.type === "withdraw") {
+    soldeIconElement.addClass("fa-arrow-down");
+    soldeIconElement.css({
+    "font-size": "1.4rem",
+    "margin-right": "0.5rem",
+    "color" : "#FF4D4D" 
+  });
   }
+  else if (operation.type === "transfert" && operation.mode === "caisse") {
+    soldeIconElement.addClass("fa-arrow-down");
+    soldeIconElement.css({
+    "font-size": "1.4rem",
+    "margin-right": "0.5rem",
+    "color" : "#FF4D4D" 
+  });
+  }
+  else if (operation.type === "transfert" && operation.mode === "bank" || operation.type === "depots") {
+  soldeIconElement.addClass("fa-arrow-up");
+    soldeIconElement.css({
+    "font-size": "1.4rem",
+    "margin-right": "0.5rem",
+    "color" : "#3AC47D" 
+  });}
 
   $("#operationsContent").append(operationElement);
 }
@@ -315,7 +360,7 @@ function loadTransactions() {
 }
 
 function createTransactionElement(transaction) {
-  var transactionCard = $("<div></div>").addClass("transaction-card operation");
+  var transactionCard = $("<div></div>").addClass("operation");
   var cardBody = $("<div></div>").addClass("card-body p-0"); // Remove padding
 
   var flexContainer = $("<div></div>").addClass("operation").css("display", "flex");
@@ -337,11 +382,17 @@ function createTransactionElement(transaction) {
 
   var amountElement = $("<p></p>").addClass("card-text mb-0 fw-bold");
   amountElement.text((transaction.factureAchat_id === null) ? "+ MAD " + transaction.montant : "- MAD " + transaction.montant);
-  amountElement.css({
-    "font-size": "1.4rem",
-    "font-family": "Arial, sans-serif",
-    "color": (transaction.factureAchat_id === null) ? "#3AC47D" : "#FF4D4D"
-  });
+
+amountElement.css({
+  "font-size": "1.4rem",
+  "font-family": "Arial, sans-serif"
+});
+
+if (transaction.factureAchat_id === null) {
+  amountElement.addClass("text-success");
+} else {
+  amountElement.addClass("text-danger");
+}
 
   var amountIconElement = $("<i></i>").addClass("fas"); // Icon for vente or achat
   amountIconElement.css({
@@ -350,9 +401,9 @@ function createTransactionElement(transaction) {
   });
 
   if (transaction.factureAchat_id === null) {
-    amountIconElement.addClass("fa-arrow-up").css("color", "#3AC47D");
+    amountIconElement.addClass("fa-arrow-up text-success");
   } else {
-    amountIconElement.addClass("fa-arrow-down").css("color", "#FF4D4D");
+    amountIconElement.addClass("fa-arrow-down text-danger");
   }
 
   var modePaiementElement = $("<p></p>").addClass("operation-type").text("Type: " + transaction.modePaiement);

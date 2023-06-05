@@ -3,7 +3,7 @@
 <head>
   <title>Bank Card</title>
   <!-- Include necessary CSS styles -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
+  {{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">  --}}
   <style>
 .custom-card {
   width: 100%;
@@ -34,36 +34,18 @@
   font-family: 'Playfair Display', serif;
 }
 
+@media (max-width: 576px) {
+  .card__header {
+    margin-top: 1rem;
+  }
+}
+
 .custom-card .card__body {
   font-family: 'Roboto', sans-serif;
   text-align: center;
 }
 
-.custom-card::before {
-  position: absolute;
-  top: 2rem;
-  right: -0.5rem;
-  content: '';
-  background: #283593;
-  height: 28px;
-  width: 28px;
-  transform: rotate(45deg);
-}
-
-.custom-card::after {
-  position: absolute;
-  content: attr(data-label);
-  top: 11px;
-  right: -14px;
-  padding: 0.5rem;
-  width: 10rem;
-  background: #3949ab;
-  color: white;
-  text-align: center;
-  font-family: 'Roboto', sans-serif;
-  box-shadow: 4px 4px 15px rgba(26, 35, 126, 0.2);
-}
-
+  
 .custom-card .operation {
   display: flex;
   justify-content: space-between;
@@ -116,20 +98,7 @@
   color: red;
 }
 
-/* @media (max-width: 767px) {
-  .card__header {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
 
-  .card__header h1 {
-    width: 100%;
-    text-align: center;
-  }
-} */
 
   </style>
 </head>
@@ -166,7 +135,7 @@
     <div class="row justify-content-center">
 
       <div class="col-xl-6 col-md-12 card-container">
-        <div class="custom-card" data-label="Transactions Bank">
+        <div class="custom-card" data-label="Transactions">
           <div class="card__container">
             <h1 class="card__header">Transactions Bank</h1>
             <div class="card__body" id="transactionsContent"></div>
@@ -175,7 +144,7 @@
       </div>
       <!-- Operations Card -->
       <div class="col-xl-6 col-md-12 card-container">
-        <div class="custom-card" data-label="Operations Bank">
+        <div class="custom-card" data-label="Operations">
           <div class="card__container">
             <h1 class="card__header ">Operations Bank</h1>
             <div class="card__body" id="operationsContent"></div>
@@ -188,8 +157,8 @@
 
   <!-- Include necessary JS scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script>
-  <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script> <!-- Replace "your-fontawesome-kit" with your own Font Awesome kit ID -->
+  {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.bundle.min.js"></script> --}}
+  {{-- <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script> <!-- Replace "your-fontawesome-kit" with your own Font Awesome kit ID --> --}}
 
   <script>
     $(document).ready(function() {
@@ -251,11 +220,25 @@
 
   var transactionMontant = parseFloat(operation.solde);
   var cardText = $("<span></span>").addClass("card-text mb-0 fw-bold");
-  cardText.text((operation.type === "withdraw" || operation.type === "transfert") ? "- MAD " + transactionMontant.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "+ MAD " + transactionMontant.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
-  cardText.css({
+  cardText.text(
+  (operation.type === "withdraw")
+    ? "- MAD " + transactionMontant.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    : (operation.type === "transfert" && operation.mode === "bank")
+    ? "- MAD " + transactionMontant.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    : (operation.type === "transfert" && operation.mode === "caisse")
+    ? "+ MAD " + transactionMontant.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+    : "+ MAD " + transactionMontant.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+);
+// "#3AC47D"
+   cardText.css({
     "font-size": "1.4rem",
     "font-family": "Arial, sans-serif",
-    "color": (operation.type === "withdraw") ? "#FF4D4D" : "#3AC47D"
+    "color" : (operation.type === "withdraw") ? "#FF4D4D" 
+    : (operation.type === "transfert" && operation.mode === "bank")
+    ? "#FF4D4D" 
+    : (operation.type === "transfert" && operation.mode === "caisse")
+    ? "#3AC47D" 
+    :"#3AC47D" 
   });
 
   var typeElement = $("<p></p>").addClass("operation-type text-start");
@@ -269,9 +252,14 @@
 
   var typeBadgeElement = $("<span></span>").addClass("me-2 badge");
 
-  if (operation.type === "withdraw" || operation.type === "transfert" ) {
+  if (operation.type === "withdraw" ) {
     typeBadgeElement.addClass("bg-danger").text(operation.type);
-  } else {
+  }
+    else if (operation.type === "transfert" && operation.mode === "bank") {
+      typeBadgeElement.addClass("bg-danger").text(operation.type);
+  }else if (operation.type === "transfert" && operation.mode === "caisse") 
+  typeBadgeElement.addClass("bg-success").text(operation.type);
+  else {
     typeBadgeElement.addClass("bg-success").text(operation.type);
   }
 
@@ -305,16 +293,38 @@ motifElement.addClass("text-sm-start text-md-center text-lg-end");
   rightSectionElement.append(rightInnerSectionElement);
   rightInnerSectionElement.append(dateElement, motifElement);
 
-  if (operation.type === "depots" ) {
-    leftSectionElement.addClass("deposit");
-    soldeIconElement.addClass("fa-arrow-up deposit");
-    cardText.addClass("text-success");
-  } else {
-    leftSectionElement.addClass("withdrawal");
-    soldeIconElement.addClass("fa-arrow-down withdrawal");
-    cardText.addClass("text-danger");
+  // if (operation.type === "depots" ) {
+  //   soldeIconElement.addClass("fa-arrow-up deposit");
+  //   soldeIconElement.css({
+  //   "font-size": "1.4rem",
+  //   "margin-right": "0.5rem",
+  //   "color" : "#3AC47D" 
+  // });
+  // } 
+  if(operation.type === "withdraw") {
+    soldeIconElement.addClass("fa-arrow-down");
+    soldeIconElement.css({
+    "font-size": "1.4rem",
+    "margin-right": "0.5rem",
+    "color" : "#FF4D4D" 
+  });
   }
-
+  else if (operation.type === "transfert" && operation.mode === "bank") {
+    soldeIconElement.addClass("fa-arrow-down");
+    soldeIconElement.css({
+    "font-size": "1.4rem",
+    "margin-right": "0.5rem",
+    "color" : "#FF4D4D" 
+  });
+  }
+  else if (operation.type === "transfert" && operation.mode === "caisse" || operation.type === "depots") {
+  soldeIconElement.addClass("fa-arrow-up");
+    soldeIconElement.css({
+    "font-size": "1.4rem",
+    "margin-right": "0.5rem",
+    "color" : "#3AC47D" 
+  });}
+ 
   $("#operationsContent").append(operationElement);
 }
 
@@ -365,12 +375,16 @@ function createTransactionElement(transaction) {
 
   var amountElement = $("<p></p>").addClass("card-text mb-0 fw-bold");
   amountElement.text((transaction.factureAchat_id === null) ? "+ MAD " + transaction.montant : "- MAD " + transaction.montant);
-  amountElement.css({
-    "font-size": "1.4rem",
-    "font-family": "Arial, sans-serif",
-    "color": (transaction.factureAchat_id === null)  ?   "#3AC47D" : "#FF4D4D"  
-  });
+amountElement.css({
+  "font-size": "1.4rem",
+  "font-family": "Arial, sans-serif"
+});
 
+if (transaction.factureAchat_id === null) {
+  amountElement.addClass("text-success");
+} else {
+  amountElement.addClass("text-danger");
+}
   var amountIconElement = $("<i></i>").addClass((transaction.factureAchat_id === null) ? "fas fa-arrow-up" : "fas fa-arrow-down"); // Icon for vente or achat
   amountIconElement.css({
     "font-size": "1.4rem",
