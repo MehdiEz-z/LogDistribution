@@ -34,6 +34,12 @@
   font-family: 'Playfair Display', serif;
 }
 
+@media (max-width: 576px) {
+  .card__header {
+    margin-top: 1rem;
+  }
+}
+
 .custom-card .card__body {
   font-family: 'Roboto', sans-serif;
   text-align: center;
@@ -166,7 +172,7 @@
     <div class="row justify-content-center">
 
       <div class="col-xl-6 col-md-12 card-container">
-        <div class="custom-card" data-label="Transactions Bank">
+        <div class="custom-card" data-label="Transactions">
           <div class="card__container">
             <h1 class="card__header">Transactions Bank</h1>
             <div class="card__body" id="transactionsContent"></div>
@@ -175,7 +181,7 @@
       </div>
       <!-- Operations Card -->
       <div class="col-xl-6 col-md-12 card-container">
-        <div class="custom-card" data-label="Operations Bank">
+        <div class="custom-card" data-label="Operations">
           <div class="card__container">
             <h1 class="card__header ">Operations Bank</h1>
             <div class="card__body" id="operationsContent"></div>
@@ -308,10 +314,18 @@ motifElement.addClass("text-sm-start text-md-center text-lg-end");
   if (operation.type === "depots" ) {
     leftSectionElement.addClass("deposit");
     soldeIconElement.addClass("fa-arrow-up deposit");
+    soldeIconElement.css({
+    "font-size": "1.4rem",
+    "margin-right": "0.5rem"
+  });
     cardText.addClass("text-success");
   } else {
     leftSectionElement.addClass("withdrawal");
     soldeIconElement.addClass("fa-arrow-down withdrawal");
+    soldeIconElement.css({
+    "font-size": "1.4rem",
+    "margin-right": "0.5rem"
+  });
     cardText.addClass("text-danger");
   }
 
@@ -365,12 +379,16 @@ function createTransactionElement(transaction) {
 
   var amountElement = $("<p></p>").addClass("card-text mb-0 fw-bold");
   amountElement.text((transaction.factureAchat_id === null) ? "+ MAD " + transaction.montant : "- MAD " + transaction.montant);
-  amountElement.css({
-    "font-size": "1.4rem",
-    "font-family": "Arial, sans-serif",
-    "color": (transaction.factureAchat_id === null)  ?   "#3AC47D" : "#FF4D4D"  
-  });
+amountElement.css({
+  "font-size": "1.4rem",
+  "font-family": "Arial, sans-serif"
+});
 
+if (transaction.factureAchat_id === null) {
+  amountElement.addClass("text-success");
+} else {
+  amountElement.addClass("text-danger");
+}
   var amountIconElement = $("<i></i>").addClass((transaction.factureAchat_id === null) ? "fas fa-arrow-up" : "fas fa-arrow-down"); // Icon for vente or achat
   amountIconElement.css({
     "font-size": "1.4rem",
